@@ -1,98 +1,134 @@
+require("dotenv").config();
+
 const express = require("express");
 const path = require("path");
-const Database = require("better-sqlite3");
+const { createClient } = require("@libsql/client");
 const bcrypt = require("bcryptjs");
-const session = require("express-session");
+const cookieSession = require("cookie-session");
 const QRCode = require("qrcode");
 const Groq = require("groq-sdk");
+
 const app = express();
+
+
+// =====================================================
+// ENVIRONMENT CHECK
+// =====================================================
+
+if (!process.env.TURSO_DATABASE_URL) {
+    console.error("❌ TURSO_DATABASE_URL is missing.");
+}
+
+if (!process.env.TURSO_AUTH_TOKEN) {
+    console.error("❌ TURSO_AUTH_TOKEN is missing.");
+}
+
+if (!process.env.GROQ_API_KEY) {
+    console.error("❌ GROQ_API_KEY is missing.");
+}
+
+
+// =====================================================
+// GROQ
+// =====================================================
 
 const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY
 });
 
-app.use(express.json());
+
+// =====================================================
+// TURSO DATABASE
+// =====================================================
+
+const db = createClient({
+    url: process.env.TURSO_DATABASE_URL,
+    authToken: process.env.TURSO_AUTH_TOKEN
+});
 
 
-// ===============================
+// =====================================================
 // MIDDLEWARE
-// ===============================
+// =====================================================
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+// =====================================================
+// DOCTOR SESSION
+// =====================================================
+
 app.use(
-    session({
-        secret: "dr-doctor-sih-secret",
-        resave: false,
-        saveUninitialized: false
+    cookieSession({
+        name: "drdoctor_session",
+        keys: [
+            process.env.SESSION_SECRET || "dr-doctor-development-secret"
+        ],
+        httpOnly: true,
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 1000 * 60 * 60 * 8
     })
 );
 
 
-// ===============================
-// DATABASE
-// ===============================
+// =====================================================
+// DATABASE INITIALIZATION
+// =====================================================
 
-const db = new Database(
-    path.join(__dirname, "notes.db")
-);
+async function initializeDatabase() {
 
+    await db.execute(`
+        CREATE TABLE IF NOT EXISTS doctors (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    `);
 
-// ===============================
-// CREATE TABLES
-// ===============================
-db.prepare(`
-    CREATE TABLE IF NOT EXISTS consultations (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+    await db.execute(`
+        CREATE TABLE IF NOT EXISTS access_codes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            doctor_id INTEGER NOT NULL,
+            code TEXT UNIQUE NOT NULL,
+            active INTEGER DEFAULT 1,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 
-        doctor_id INTEGER NOT NULL,
+            FOREIGN KEY (doctor_id)
+            REFERENCES doctors(id)
+        )
+    `);
 
-        patient_id TEXT NOT NULL,
-        patient_name TEXT NOT NULL,
-        patient_age INTEGER,
-        patient_gender TEXT,
-        patient_phone TEXT,
-        patient_blood_group TEXT,
+    await db.execute(`
+        CREATE TABLE IF NOT EXISTS consultations (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            doctor_id INTEGER NOT NULL,
+            patient_id TEXT NOT NULL,
+            patient_name TEXT NOT NULL,
+            patient_age INTEGER,
+            patient_gender TEXT,
+            patient_phone TEXT,
+            patient_blood_group TEXT,
+            language TEXT,
+            conversation TEXT,
+            report TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 
-        language TEXT,
+            FOREIGN KEY (doctor_id)
+            REFERENCES doctors(id)
+        )
+    `);
 
-        conversation TEXT,
-
-        report TEXT,
-
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-
-        FOREIGN KEY (doctor_id)
-        REFERENCES doctors(id)
-    )
-`).run();
-db.exec(`
-    CREATE TABLE IF NOT EXISTS access_codes (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        doctor_id INTEGER NOT NULL,
-        code TEXT UNIQUE NOT NULL,
-        active INTEGER DEFAULT 1,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-
-        FOREIGN KEY (doctor_id)
-        REFERENCES doctors(id)
-    )
-`);
-db.exec(`
-    CREATE TABLE IF NOT EXISTS doctors (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        email TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-`);
+    console.log("✅ Turso database initialized.");
+}
 
 
-// ===============================
+// =====================================================
 // SERVE FRONTEND
-// ===============================
+// =====================================================
 
 app.use(
     express.static(
@@ -101,9 +137,9 @@ app.use(
 );
 
 
-// ===============================
+// =====================================================
 // HOME
-// ===============================
+// =====================================================
 
 app.get("/", (req, res) => {
     res.sendFile(
@@ -112,13 +148,17 @@ app.get("/", (req, res) => {
 });
 
 
-// ===============================
+// =====================================================
 // DOCTOR REGISTER
-// ===============================
+// =====================================================
 
 app.post("/api/doctor/register", async (req, res) => {
 
-    const { name, email, password } = req.body;
+    const {
+        name,
+        email,
+        password
+    } = req.body;
 
     if (!name || !email || !password) {
         return res.status(400).json({
@@ -136,36 +176,47 @@ app.post("/api/doctor/register", async (req, res) => {
 
     try {
 
-        const existingDoctor = db
-            .prepare("SELECT * FROM doctors WHERE email = ?")
-            .get(email);
+        const existingDoctor = await db.execute({
+            sql: `
+                SELECT *
+                FROM doctors
+                WHERE email = ?
+            `,
+            args: [email]
+        });
 
-        if (existingDoctor) {
+        if (existingDoctor.rows.length > 0) {
             return res.status(400).json({
                 success: false,
                 message: "An account with this email already exists."
             });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword =
+            await bcrypt.hash(password, 10);
 
-        const result = db
-            .prepare(`
+        const result = await db.execute({
+            sql: `
                 INSERT INTO doctors
                 (name, email, password)
                 VALUES (?, ?, ?)
-            `)
-            .run(name, email, hashedPassword);
+            `,
+            args: [
+                name,
+                email,
+                hashedPassword
+            ]
+        });
 
         res.json({
             success: true,
             message: "Doctor account created successfully!",
-            doctorId: result.lastInsertRowid
+            doctorId: Number(result.lastInsertRowid)
         });
 
     } catch (error) {
 
-        console.error(error);
+        console.error("Doctor registration error:", error);
 
         res.status(500).json({
             success: false,
@@ -175,13 +226,16 @@ app.post("/api/doctor/register", async (req, res) => {
 });
 
 
-// ===============================
+// =====================================================
 // DOCTOR LOGIN
-// ===============================
+// =====================================================
 
 app.post("/api/doctor/login", async (req, res) => {
 
-    const { email, password } = req.body;
+    const {
+        email,
+        password
+    } = req.body;
 
     if (!email || !password) {
         return res.status(400).json({
@@ -192,9 +246,16 @@ app.post("/api/doctor/login", async (req, res) => {
 
     try {
 
-        const doctor = db
-            .prepare("SELECT * FROM doctors WHERE email = ?")
-            .get(email);
+        const result = await db.execute({
+            sql: `
+                SELECT *
+                FROM doctors
+                WHERE email = ?
+            `,
+            args: [email]
+        });
+
+        const doctor = result.rows[0];
 
         if (!doctor) {
             return res.status(401).json({
@@ -203,10 +264,11 @@ app.post("/api/doctor/login", async (req, res) => {
             });
         }
 
-        const passwordCorrect = await bcrypt.compare(
-            password,
-            doctor.password
-        );
+        const passwordCorrect =
+            await bcrypt.compare(
+                password,
+                doctor.password
+            );
 
         if (!passwordCorrect) {
             return res.status(401).json({
@@ -215,14 +277,16 @@ app.post("/api/doctor/login", async (req, res) => {
             });
         }
 
-        req.session.doctorId = doctor.id;
-        req.session.doctorName = doctor.name;
+        req.session = {
+            doctorId: Number(doctor.id),
+            doctorName: doctor.name
+        };
 
         res.json({
             success: true,
             message: "Login successful!",
             doctor: {
-                id: doctor.id,
+                id: Number(doctor.id),
                 name: doctor.name,
                 email: doctor.email
             }
@@ -230,7 +294,7 @@ app.post("/api/doctor/login", async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
+        console.error("Doctor login error:", error);
 
         res.status(500).json({
             success: false,
@@ -240,13 +304,13 @@ app.post("/api/doctor/login", async (req, res) => {
 });
 
 
-// ===============================
+// =====================================================
 // CHECK LOGGED-IN DOCTOR
-// ===============================
+// =====================================================
 
 app.get("/api/doctor/me", (req, res) => {
 
-    if (!req.session.doctorId) {
+    if (!req.session || !req.session.doctorId) {
         return res.status(401).json({
             success: false,
             message: "Not logged in."
@@ -263,83 +327,28 @@ app.get("/api/doctor/me", (req, res) => {
 });
 
 
-// ===============================
+// =====================================================
 // LOGOUT
-// ===============================
+// =====================================================
 
 app.post("/api/doctor/logout", (req, res) => {
 
-    req.session.destroy(() => {
-
-        res.json({
-            success: true,
-            message: "Logged out successfully."
-        });
-
-    });
-});
-
-// ===============================
-// DOCTOR DASHBOARD
-// ===============================
-
-app.get("/api/doctor/dashboard", (req, res) => {
-
-    if (!req.session.doctorId) {
-        return res.status(401).json({
-            success: false,
-            message: "Please login first."
-        });
-    }
-
-    const doctor = db
-        .prepare(`
-            SELECT id, name, email, created_at
-            FROM doctors
-            WHERE id = ?
-        `)
-        .get(req.session.doctorId);
-
-    const codes = db
-        .prepare(`
-            SELECT *
-            FROM access_codes
-            WHERE doctor_id = ?
-            ORDER BY created_at DESC
-        `)
-        .all(req.session.doctorId);
-    
-    const consultations = db.prepare(`
-        SELECT
-            id,
-            patient_id,
-            patient_name,
-            patient_age,
-            patient_gender,
-            patient_phone,
-            patient_blood_group,
-            language,
-            report,
-            created_at
-        FROM consultations
-        WHERE doctor_id = ?
-        ORDER BY created_at DESC
-    `).all(req.session.doctorId);    
+    req.session = null;
 
     res.json({
         success: true,
-        doctor,
-        codes,
-        consultations
+        message: "Logged out successfully."
     });
 });
-// ===============================
-// GENERATE PATIENT ACCESS CODE
-// ===============================
 
-app.post("/api/doctor/generate-code", async (req, res) => {
 
-    if (!req.session.doctorId) {
+// =====================================================
+// DOCTOR DASHBOARD
+// =====================================================
+
+app.get("/api/doctor/dashboard", async (req, res) => {
+
+    if (!req.session || !req.session.doctorId) {
         return res.status(401).json({
             success: false,
             message: "Please login first."
@@ -348,165 +357,330 @@ app.post("/api/doctor/generate-code", async (req, res) => {
 
     try {
 
-        const doctorId = req.session.doctorId;
+        const doctorId =
+            Number(req.session.doctorId);
 
-        // Generate random code
-        const randomPart = Math.random()
-            .toString(36)
-            .substring(2, 8)
-            .toUpperCase();
 
-        const code = "DR-" + randomPart;
+        // ---------------------------------------------
+        // DOCTOR
+        // ---------------------------------------------
 
-        // Save code
-        db.prepare(`
-            INSERT INTO access_codes
-            (doctor_id, code)
-            VALUES (?, ?)
-        `).run(doctorId, code);
+        const doctorResult = await db.execute({
+            sql: `
+                SELECT
+                    id,
+                    name,
+                    email,
+                    created_at
+                FROM doctors
+                WHERE id = ?
+            `,
+            args: [doctorId]
+        });
 
-        // QR contains the access code
-        const patientUrl =
-            `${req.protocol}://${req.get("host")}/patient.html?code=${code}`;
+        const doctor =
+            doctorResult.rows[0] || null;
 
-        const qrData =
-            await QRCode.toDataURL(patientUrl);
+
+        // ---------------------------------------------
+        // ACCESS CODES
+        // ---------------------------------------------
+
+        const codesResult = await db.execute({
+            sql: `
+                SELECT *
+                FROM access_codes
+                WHERE doctor_id = ?
+                ORDER BY created_at DESC
+            `,
+            args: [doctorId]
+        });
+
+        const codes =
+            codesResult.rows;
+
+
+        // ---------------------------------------------
+        // CONSULTATIONS
+        // ---------------------------------------------
+
+        const consultationsResult = await db.execute({
+            sql: `
+                SELECT
+                    id,
+                    patient_id,
+                    patient_name,
+                    patient_age,
+                    patient_gender,
+                    patient_phone,
+                    patient_blood_group,
+                    language,
+                    report,
+                    created_at
+                FROM consultations
+                WHERE doctor_id = ?
+                ORDER BY created_at DESC
+            `,
+            args: [doctorId]
+        });
+
+        const consultations =
+            consultationsResult.rows;
+
 
         res.json({
             success: true,
-            code: code,
-            qr: qrData
+            doctor,
+            codes,
+            consultations
         });
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Dashboard error:",
+            error
+        );
 
         res.status(500).json({
             success: false,
-            message: "Could not generate access code."
+            message: "Could not load dashboard."
         });
     }
 });
 
-// ===============================
-// PATIENT ACCESS CODE VERIFICATION
-// ===============================
 
-app.post("/api/patient/access", (req, res) => {
+// =====================================================
+// GENERATE PATIENT ACCESS CODE
+// =====================================================
 
-    const { code } = req.body;
+app.post(
+    "/api/doctor/generate-code",
+    async (req, res) => {
 
-    if (!code) {
-
-        return res.status(400).json({
-            success: false,
-            message: "Please enter an access code."
-        });
-
-    }
-
-
-    const accessCode = db
-        .prepare(`
-            SELECT
-                access_codes.id,
-                access_codes.code,
-                access_codes.active,
-                doctors.id AS doctor_id,
-                doctors.name AS doctor_name
-            FROM access_codes
-
-            JOIN doctors
-            ON access_codes.doctor_id = doctors.id
-
-            WHERE access_codes.code = ?
-        `)
-        .get(code);
-
-
-    if (!accessCode) {
-
-        return res.status(404).json({
-            success: false,
-            message: "Invalid access code."
-        });
-
-    }
-
-
-    if (!accessCode.active) {
-
-        return res.status(403).json({
-            success: false,
-            message: "This access code is no longer active."
-        });
-
-    }
-
-
-    res.json({
-
-        success: true,
-
-        doctor: {
-            id: accessCode.doctor_id,
-            name: accessCode.doctor_name
+        if (!req.session || !req.session.doctorId) {
+            return res.status(401).json({
+                success: false,
+                message: "Please login first."
+            });
         }
 
-    });
+        try {
 
-});
-// ===============================
-// START SERVER
-// ===============================
+            const doctorId =
+                Number(req.session.doctorId);
 
-// ===============================
-// REAL AI PATIENT INTERVIEW
-// ===============================
 
-app.post("/api/patient/interview", async (req, res) => {
+            // -----------------------------------------
+            // GENERATE RANDOM CODE
+            // -----------------------------------------
 
-    try {
+            const randomPart =
+                Math.random()
+                    .toString(36)
+                    .substring(2, 8)
+                    .toUpperCase();
 
-        const {
-            message,
-            language,
-            conversation
-        } = req.body;
+            const code =
+                "DR-" + randomPart;
 
-        if (!message || !message.trim()) {
+
+            // -----------------------------------------
+            // SAVE CODE
+            // -----------------------------------------
+
+            await db.execute({
+                sql: `
+                    INSERT INTO access_codes
+                    (doctor_id, code)
+                    VALUES (?, ?)
+                `,
+                args: [
+                    doctorId,
+                    code
+                ]
+            });
+
+
+            // -----------------------------------------
+            // QR CODE
+            // -----------------------------------------
+
+            const patientUrl =
+                `${req.protocol}://${req.get("host")}/patient.html?code=${code}`;
+
+            const qrData =
+                await QRCode.toDataURL(patientUrl);
+
+
+            res.json({
+                success: true,
+                code,
+                qr: qrData
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Access code error:",
+                error
+            );
+
+            res.status(500).json({
+                success: false,
+                message: "Could not generate access code."
+            });
+        }
+    }
+);
+
+
+// =====================================================
+// PATIENT ACCESS CODE VERIFICATION
+// =====================================================
+
+app.post(
+    "/api/patient/access",
+    async (req, res) => {
+
+        const { code } = req.body;
+
+        if (!code) {
             return res.status(400).json({
                 success: false,
-                message: "Please provide a message."
+                message: "Please enter an access code."
             });
         }
 
-        if (!process.env.GEMINI_API_KEY) {
-            return res.status(500).json({
+        try {
+
+            const result = await db.execute({
+                sql: `
+                    SELECT
+                        access_codes.id,
+                        access_codes.code,
+                        access_codes.active,
+                        doctors.id AS doctor_id,
+                        doctors.name AS doctor_name
+
+                    FROM access_codes
+
+                    JOIN doctors
+                    ON access_codes.doctor_id = doctors.id
+
+                    WHERE access_codes.code = ?
+                `,
+                args: [code]
+            });
+
+            const accessCode =
+                result.rows[0];
+
+
+            if (!accessCode) {
+
+                return res.status(404).json({
+                    success: false,
+                    message: "Invalid access code."
+                });
+            }
+
+
+            if (!accessCode.active) {
+
+                return res.status(403).json({
+                    success: false,
+                    message: "This access code is no longer active."
+                });
+            }
+
+
+            res.json({
+
+                success: true,
+
+                doctor: {
+                    id: Number(accessCode.doctor_id),
+                    name: accessCode.doctor_name
+                }
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Patient access error:",
+                error
+            );
+
+            res.status(500).json({
                 success: false,
-                message: "Gemini API key is not configured."
+                message: "Could not verify access code."
             });
         }
-
-        
-
-        // Convert previous conversation into text
-        const conversationText =
-            (conversation || [])
-                .map(item => {
-                    const role =
-                        item.role === "patient"
-                            ? "Patient"
-                            : "AI Assistant";
-
-                    return `${role}: ${item.message}`;
-                })
-                .join("\n");
+    }
+);
 
 
-        // Instructions for our AI
-        const systemInstruction = `
+// =====================================================
+// REAL AI PATIENT INTERVIEW
+// =====================================================
+
+app.post(
+    "/api/patient/interview",
+    async (req, res) => {
+
+        try {
+
+            const {
+                message,
+                language,
+                conversation
+            } = req.body;
+
+
+            if (!message || !message.trim()) {
+
+                return res.status(400).json({
+                    success: false,
+                    message: "Please provide a message."
+                });
+            }
+
+
+            if (!process.env.GROQ_API_KEY) {
+
+                return res.status(500).json({
+                    success: false,
+                    message: "Groq API key is not configured."
+                });
+            }
+
+
+            // -----------------------------------------
+            // CONVERSATION TEXT
+            // -----------------------------------------
+
+            const conversationText =
+                (conversation || [])
+                    .map(item => {
+
+                        const role =
+                            item.role === "patient"
+                                ? "Patient"
+                                : "AI Assistant";
+
+                        return `${role}: ${item.message}`;
+
+                    })
+                    .join("\n");
+
+
+            // -----------------------------------------
+            // AI SYSTEM INSTRUCTION
+            // -----------------------------------------
+
+            const systemInstruction = `
 
 You are Dr.Doctor, an AI pre-consultation medical history assistant.
 
@@ -553,7 +727,11 @@ You are NOT replacing the doctor.
 `;
 
 
-        const prompt = `
+            // -----------------------------------------
+            // AI PROMPT
+            // -----------------------------------------
+
+            const prompt = `
 
 Conversation so far:
 
@@ -573,115 +751,138 @@ Do not explain your reasoning.
 `;
 
 
-        const completion =
-            await groq.chat.completions.create({
-                model: "openai/gpt-oss-20b",
+            // -----------------------------------------
+            // GROQ
+            // -----------------------------------------
 
-                messages: [
-                    {
-                        role: "system",
-                        content: systemInstruction
-                    },
-                    {
-                        role: "user",
-                        content: prompt
-                    }
-                ],
+            const completion =
+                await groq.chat.completions.create({
 
-                temperature: 0.3,
-                max_tokens: 300
-            });
+                    model: "openai/gpt-oss-20b",
 
-        const reply =
-            completion.choices[0]?.message?.content;
+                    messages: [
 
+                        {
+                            role: "system",
+                            content: systemInstruction
+                        },
 
-        res.json({
+                        {
+                            role: "user",
+                            content: prompt
+                        }
 
-            success: true,
+                    ],
 
-            reply:
-                reply ||
-                "Could you tell me a little more about your symptoms?",
-
-            language:
-                language || "English"
-
-        });
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Gemini interview error:",
-            error
-        );
-
-        res.status(500).json({
-
-            success: false,
-
-            message:
-                "The AI assistant could not respond right now."
-
-        });
-
-    }
-
-});
-// ===============================
-// GENERATE PATIENT REPORT
-// ===============================
-
-app.post("/api/patient/report", async (req, res) => {
-
-    try {
-
-        const {
-            conversation,
-            language,
-            patientDetails,
-            accessCode
-        } = req.body;
+                    temperature: 0.3,
+                    max_tokens: 300
+                });
 
 
-        // Check conversation
+            const reply =
+                completion
+                    .choices[0]
+                    ?.message
+                    ?.content;
 
-        if (!conversation || conversation.length === 0) {
 
-            return res.status(400).json({
-                success: false,
-                message: "No consultation conversation found."
+            res.json({
+
+                success: true,
+
+                reply:
+                    reply ||
+                    "Could you tell me a little more about your symptoms?",
+
+                language:
+                    language || "English"
+
             });
 
         }
 
+        catch (error) {
 
-        
+            console.error(
+                "Groq interview error:",
+                error
+            );
 
-       
+            res.status(500).json({
 
-        // Convert conversation to text
+                success: false,
 
-        const conversationText =
-            conversation
-                .map(item => {
+                message:
+                    "The AI assistant could not respond right now."
 
-                    const role =
-                        item.role === "patient"
-                            ? "Patient"
-                            : "AI Assistant";
-
-                    return `${role}: ${item.message}`;
-
-                })
-                .join("\n");
+            });
+        }
+    }
+);
 
 
-        // Report instructions
+// =====================================================
+// GENERATE PATIENT REPORT
+// =====================================================
 
-        const systemInstruction = `
+app.post(
+    "/api/patient/report",
+    async (req, res) => {
+
+        try {
+
+            const {
+                conversation,
+                language,
+                patientDetails,
+                accessCode
+            } = req.body;
+
+
+            // -----------------------------------------
+            // CHECK CONVERSATION
+            // -----------------------------------------
+
+            if (
+                !conversation ||
+                conversation.length === 0
+            ) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "No consultation conversation found."
+
+                });
+            }
+
+
+            // -----------------------------------------
+            // CONVERSATION TEXT
+            // -----------------------------------------
+
+            const conversationText =
+                conversation
+                    .map(item => {
+
+                        const role =
+                            item.role === "patient"
+                                ? "Patient"
+                                : "AI Assistant";
+
+                        return `${role}: ${item.message}`;
+
+                    })
+                    .join("\n");
+
+
+            // -----------------------------------------
+            // REPORT INSTRUCTIONS
+            // -----------------------------------------
+
+            const systemInstruction = `
 
 You are Dr.Doctor's medical pre-consultation report generator.
 
@@ -715,6 +916,7 @@ Create these sections:
 13. Overall Pre-Consultation Summary
 
 If information is missing, write:
+
 "Not provided"
 
 The report should be written in:
@@ -723,7 +925,11 @@ ${language || "English"}
 `;
 
 
-        const prompt = `
+            // -----------------------------------------
+            // REPORT PROMPT
+            // -----------------------------------------
+
+            const prompt = `
 
 PATIENT INFORMATION:
 
@@ -733,9 +939,12 @@ Age: ${patientDetails?.age || "Not provided"}
 Gender: ${patientDetails?.gender || "Not provided"}
 Phone: ${patientDetails?.phone || "Not provided"}
 Blood Group: ${patientDetails?.bloodGroup || "Not provided"}
+
 Consultation Date: ${
     patientDetails?.consultationDate
-        ? new Date(patientDetails.consultationDate).toLocaleDateString()
+        ? new Date(
+            patientDetails.consultationDate
+        ).toLocaleDateString()
         : "Not provided"
 }
 
@@ -758,109 +967,334 @@ Return only the report.
 `;
 
 
-        // Generate report
+            // -----------------------------------------
+            // GROQ REPORT
+            // -----------------------------------------
 
-        const completion =
-            await groq.chat.completions.create({
-                model: "openai/gpt-oss-20b",
+            const completion =
+                await groq.chat.completions.create({
 
-                messages: [
-                    {
-                        role: "system",
-                        content: systemInstruction
-                    },
-                    {
-                        role: "user",
-                        content: prompt
-                    }
-                ],
+                    model: "openai/gpt-oss-20b",
 
-                temperature: 0.2,
-                max_tokens: 1500
+                    messages: [
+
+                        {
+                            role: "system",
+                            content: systemInstruction
+                        },
+
+                        {
+                            role: "user",
+                            content: prompt
+                        }
+
+                    ],
+
+                    temperature: 0.2,
+                    max_tokens: 1500
+                });
+
+
+            const report =
+                completion
+                    .choices[0]
+                    ?.message
+                    ?.content;
+
+
+            // -----------------------------------------
+            // FIND DOCTOR USING ACCESS CODE
+            // -----------------------------------------
+
+            if (!accessCode) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Access code is required."
+
+                });
+            }
+
+
+            const accessResult =
+                await db.execute({
+
+                    sql: `
+                        SELECT doctor_id
+                        FROM access_codes
+                        WHERE code = ?
+                        AND active = 1
+                    `,
+
+                    args: [accessCode]
+
+                });
+
+
+            const accessData =
+                accessResult.rows[0];
+
+
+            if (!accessData) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Invalid or inactive access code."
+
+                });
+            }
+
+
+            // -----------------------------------------
+            // SAVE CONSULTATION
+            // -----------------------------------------
+
+            await db.execute({
+
+                sql: `
+                    INSERT INTO consultations (
+
+                        doctor_id,
+                        patient_id,
+                        patient_name,
+                        patient_age,
+                        patient_gender,
+                        patient_phone,
+                        patient_blood_group,
+                        language,
+                        conversation,
+                        report
+
+                    )
+
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                `,
+
+                args: [
+
+                    Number(accessData.doctor_id),
+
+                    patientDetails?.patientId ||
+                        "Not provided",
+
+                    patientDetails?.name ||
+                        "Not provided",
+
+                    patientDetails?.age ||
+                        null,
+
+                    patientDetails?.gender ||
+                        "Not provided",
+
+                    patientDetails?.phone ||
+                        "",
+
+                    patientDetails?.bloodGroup ||
+                        "",
+
+                    language ||
+                        "English",
+
+                    JSON.stringify(
+                        conversation
+                    ),
+
+                    report ||
+                        "Unable to generate the report."
+
+                ]
+
             });
 
-        const report =
-            completion.choices[0]?.message?.content;
-        // Find the doctor using the patient's access code
-        const accessData = db.prepare(`
-            SELECT doctor_id
-            FROM access_codes
-            WHERE code = ? AND active = 1
-        `).get(accessCode);
 
-        if (!accessData) {
-            return res.status(400).json({
+            // -----------------------------------------
+            // SEND REPORT
+            // -----------------------------------------
+
+            res.json({
+
+                success: true,
+
+                report:
+                    report ||
+                    "Unable to generate the report."
+
+            });
+
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Report generation error:",
+                error
+            );
+
+            res.status(500).json({
+
                 success: false,
-                message: "Invalid or inactive access code."
+
+                message:
+                    "Could not generate patient report."
+
+            });
+        }
+    }
+);
+
+
+// =====================================================
+// DOCTOR CONSULTATION REPORT
+// =====================================================
+
+app.get(
+    "/api/doctor/consultation/:id",
+    async (req, res) => {
+
+        if (!req.session || !req.session.doctorId) {
+
+            return res.status(401).json({
+
+                success: false,
+
+                message:
+                    "Please login first."
+
             });
         }
 
-        // Save consultation in database
-        db.prepare(`
-            INSERT INTO consultations (
-                doctor_id,
-                patient_id,
-                patient_name,
-                patient_age,
-                patient_gender,
-                patient_phone,
-                patient_blood_group,
-                language,
-                conversation,
-                report
-            )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `).run(
-            accessData.doctor_id,
-            patientDetails?.patientId || "Not provided",
-            patientDetails?.name || "Not provided",
-            patientDetails?.age || null,
-            patientDetails?.gender || "Not provided",
-            patientDetails?.phone || "",
-            patientDetails?.bloodGroup || "",
-            language || "English",
-            JSON.stringify(conversation),
-            report || "Unable to generate the report."
-        );    
+
+        try {
+
+            const consultationId =
+                req.params.id;
+
+            const doctorId =
+                Number(req.session.doctorId);
 
 
-    
+            const result =
+                await db.execute({
+
+                    sql: `
+                        SELECT
+                            id,
+                            patient_id,
+                            patient_name,
+                            patient_age,
+                            patient_gender,
+                            patient_phone,
+                            patient_blood_group,
+                            language,
+                            conversation,
+                            report,
+                            created_at
+
+                        FROM consultations
+
+                        WHERE id = ?
+                        AND doctor_id = ?
+                    `,
+
+                    args: [
+                        consultationId,
+                        doctorId
+                    ]
+
+                });
 
 
-        // Send report to frontend
-
-        res.json({
-
-            success: true,
-
-            report:
-                report ||
-                "Unable to generate the report."
-
-        });
+            const consultation =
+                result.rows[0];
 
 
-    } catch (error) {
+            if (!consultation) {
 
-        console.error(
-            "Report generation error:",
-            error
+                return res.status(404).json({
+
+                    success: false,
+
+                    message:
+                        "Consultation not found."
+
+                });
+            }
+
+
+            res.json({
+
+                success: true,
+
+                consultation
+
+            });
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Consultation report error:",
+                error
+            );
+
+            res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Could not load consultation."
+
+            });
+        }
+    }
+);
+
+
+// =====================================================
+// START SERVER
+// =====================================================
+
+async function startServer() {
+
+    try {
+
+        await initializeDatabase();
+
+        const PORT =
+            process.env.PORT || 3000;
+
+        app.listen(
+            PORT,
+            "0.0.0.0",
+            () => {
+
+                console.log(
+                    `🩺 Dr.Doctor server running on port ${PORT}`
+                );
+
+            }
         );
-
-
-        res.status(500).json({
-
-            success: false,
-
-            message:
-                "Could not generate patient report."
-
-        });
 
     }
 
-});
+    catch (error) {
 
-app.listen(3000, "0.0.0.0", () => {
-    console.log("🩺 Dr.Doctor server running on port 3000");
-});
+        console.error(
+            "❌ Failed to start server:",
+            error
+        );
+
+        process.exit(1);
+    }
+}
+
+
+startServer();

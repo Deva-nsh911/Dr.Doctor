@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1479c9">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Dr.Doctor">
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Patient Access | Dr.Doctor</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body class="patient-page">
+
+    <!-- PWA INSTALL BANNER -->
+
+    <div id="installBanner" class="install-banner">
+
+        <div class="install-content">
+
+            <div class="install-icon">
+                🩺
+            </div>
+
+            <div class="install-text">
+
+                <strong>
+                    Install Dr.Doctor
+                </strong>
+
+                <span>
+                    Install the app for a faster patient experience.
+                </span>
+
+            </div>
+
+            <button
+                id="installButton"
+                class="install-button">
+
+                Install
+
+            </button>
+
+            <button
+                id="closeInstall"
+                class="close-install">
+
+                ×
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- PWA INSTALL BANNER -->
+
+    <div id="installBanner" class="install-banner">
+
+        <div class="install-content">
+
+            <div class="install-icon">
+                🩺
+            </div>
+
+            <div class="install-text">
+
+                <strong>
+                    Install Dr.Doctor
+                </strong>
+
+                <span>
+                    Install the app for a faster patient experience.
+                </span>
+
+            </div>
+
+            <button
+                id="installButton"
+                class="install-button">
+
+                Install
+
+            </button>
+
+            <button
+                id="closeInstall"
+                class="close-install">
+
+                ×
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- TOP BAR -->
+
+    <nav class="patient-nav">
+
+        <a href="index.html" class="patient-logo">
+
+            <span>✚</span>
+
+            Dr.Doctor
+
+        </a>
+
+        <div class="privacy-badge">
+            🔒 Secure & Confidential
+        </div>
+
+    </nav>
+
+
+
+    <!-- MAIN -->
+
+    <main class="patient-main">
+
+
+        <!-- LEFT VISUAL -->
+
+        <section class="patient-welcome">
+
+            <div class="patient-badge">
+                🩺 AI PRE-CONSULTATION
+            </div>
+
+
+            <h1>
+                Tell your story.
+                <span>We'll help organize it.</span>
+            </h1>
+
+
+            <p>
+                Before meeting your doctor, Dr.Doctor
+                will have a simple conversation with you
+                about your health concerns and medical history.
+            </p>
+
+
+            <div class="patient-illustration">
+
+                <div class="illustration-circle">
+                    🤖
+                </div>
+
+                <div class="illustration-person">
+                    🧑‍⚕️
+                </div>
+
+                <div class="floating-med-card card-a">
+                    💬 Easy conversation
+                </div>
+
+                <div class="floating-med-card card-b">
+                    🎤 Voice supported
+                </div>
+
+            </div>
+
+
+            <div class="patient-points">
+
+                <div>
+                    <span>✓</span>
+                    No complicated forms
+                </div>
+
+                <div>
+                    <span>✓</span>
+                    Voice or text conversation
+                </div>
+
+                <div>
+                    <span>✓</span>
+                    Available in your language
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ACCESS CARD -->
+
+        <section class="access-panel">
+
+            <div class="access-panel-card">
+
+
+                <div class="access-card-icon">
+                    🔐
+                </div>
+
+
+                <p class="access-label">
+                    DOCTOR ACCESS
+                </p>
+
+
+                <h2>
+                    Welcome to Dr.Doctor
+                </h2>
+
+
+                <p class="access-description">
+                    Enter the access code provided by
+                    your doctor or clinic to begin.
+                </p>
+
+
+                <!-- CODE FORM -->
+
+                <form id="accessForm">
+
+                    <label for="accessCodeInput">
+                        Access Code
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="accessCodeInput"
+                        placeholder="e.g. DR-7K29XP"
+                        autocomplete="off"
+                        required
+                    >
+
+
+                    <button
+                        type="submit"
+                        class="continue-btn"
+                    >
+                        Continue →
+                    </button>
+
+                </form>
+
+
+                <div
+                    id="accessMessage"
+                    class="access-message">
+                </div>
+
+
+                <div class="or-divider">
+
+                    <span>OR</span>
+
+                </div>
+
+
+                <!-- QR -->
+
+                <button
+                    class="scan-btn"
+                    id="scanButton">
+
+                    ▦ &nbsp; Scan QR Code
+
+                </button>
+
+
+                <p class="scan-note">
+                    Your doctor or clinic will provide
+                    the QR code or access code.
+                </p>
+
+
+                <div class="privacy-note">
+
+                    🔒 Your information is handled
+                    confidentially.
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <script>
+
+        const accessForm =
+            document.getElementById("accessForm");
+
+        const accessMessage =
+            document.getElementById("accessMessage");
+
+
+        // =====================================
+        // CHECK URL FOR QR CODE
+        // =====================================
+
+        const urlParams =
+            new URLSearchParams(window.location.search);
+
+        const qrCode =
+            urlParams.get("code");
+
+
+        if (qrCode) {
+
+            document.getElementById(
+                "accessCodeInput"
+            ).value = qrCode;
+
+        }
+
+
+        // =====================================
+        // SUBMIT ACCESS CODE
+        // =====================================
+
+        accessForm.addEventListener(
+            "submit",
+            async (event) => {
+
+                event.preventDefault();
+
+
+                const code =
+                    document
+                        .getElementById(
+                            "accessCodeInput"
+                        )
+                        .value
+                        .trim()
+                        .toUpperCase();
+
+
+                accessMessage.textContent =
+                    "Checking access code...";
+
+                accessMessage.className =
+                    "access-message";
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/api/patient/access",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body: JSON.stringify({
+                                    code
+                                })
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (data.success) {
+
+                        accessMessage.textContent =
+                            "✓ Access verified!";
+
+                        accessMessage.className =
+                            "access-message success";
+
+
+                        // Save doctor information
+                        sessionStorage.setItem(
+                            "doctorName",
+                            data.doctor.name
+                        );
+
+                        sessionStorage.setItem(
+                            "accessCode",
+                            code
+                        );
+
+
+                        setTimeout(() => {
+
+                            window.location.href =
+                                "patient-details.html";
+
+                        }, 700);
+
+
+                    } else {
+
+                        accessMessage.textContent =
+                            data.message;
+
+                        accessMessage.className =
+                            "access-message error";
+
+                    }
+
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    accessMessage.textContent =
+                        "Unable to connect to server.";
+
+                    accessMessage.className =
+                        "access-message error";
+
+                }
+
+            }
+        );
+
+
+        // =====================================
+        // QR BUTTON
+        // =====================================
+
+        document
+            .getElementById("scanButton")
+            .addEventListener("click", () => {
+
+                alert(
+                    "QR scanning will be added next. For now, enter the access code manually."
+                );
+
+            });
+
+    </script>
+
+    <script>
+    if ("serviceWorker" in navigator) {
+
+        window.addEventListener("load", () => {
+
+            navigator.serviceWorker
+                .register("/sw.js")
+                .then(() => {
+
+                    console.log(
+                        "Dr.Doctor PWA service worker registered."
+                    );
+
+                })
+                .catch(error => {
+
+                    console.error(
+                        "PWA registration failed:",
+                        error
+                    );
+
+                });
+
+        });
+
+    }
+    // ===============================
+    // READ ACCESS CODE FROM QR URL
+    // ===============================
+
+    const accessUrlParams = new URLSearchParams(
+        window.location.search
+    );
+
+    const accessCodeFromQR =
+        accessUrlParams.get("code");
+
+    if (accessCodeFromQR) {
+
+        const codeInput =
+            document.getElementById("accessCode");
+
+        if (codeInput) {
+
+            codeInput.value =
+                accessCodeFromQR;
+
+        }
+    }
+    // ===============================
+    // PWA INSTALL
+    // ===============================
+
+    let deferredInstallPrompt = null;
+
+    const installBanner =
+        document.getElementById("installBanner");
+
+    const installButton =
+        document.getElementById("installButton");
+
+    const closeInstall =
+        document.getElementById("closeInstall");
+
+
+    // Android / Chrome install prompt
+
+    window.addEventListener(
+        "beforeinstallprompt",
+        (event) => {
+
+            event.preventDefault();
+
+            deferredInstallPrompt = event;
+
+            if (installBanner) {
+
+                installBanner.style.display =
+                    "block";
+
+            }
+
+        }
+    );
+
+
+    // Install button
+
+    if (installButton) {
+
+        installButton.addEventListener(
+            "click",
+            async () => {
+
+                if (!deferredInstallPrompt) {
+
+                    return;
+
+                }
+
+                deferredInstallPrompt.prompt();
+
+                const result =
+                    await deferredInstallPrompt.userChoice;
+
+                console.log(
+                    "PWA install result:",
+                    result.outcome
+                );
+
+                deferredInstallPrompt = null;
+
+                if (installBanner) {
+
+                    installBanner.style.display =
+                        "none";
+
+                }
+
+            }
+        );
+
+    }
+
+
+    // Close button
+
+    if (closeInstall) {
+
+        closeInstall.addEventListener(
+            "click",
+            () => {
+
+                installBanner.style.display =
+                    "none";
+
+            }
+        );
+
+    }
+
+    // ===============================
+    // DR.DOCTOR PWA INSTALL
+    // ===============================
+
+    let drDoctorInstallPrompt = null;
+
+    const drDoctorInstallBanner =
+        document.getElementById("installBanner");
+
+    const drDoctorInstallButton =
+        document.getElementById("installButton");
+
+    const drDoctorCloseInstall =
+        document.getElementById("closeInstall");
+
+
+    // Listen for browser install availability
+
+    window.addEventListener(
+        "beforeinstallprompt",
+        (event) => {
+
+            event.preventDefault();
+
+            drDoctorInstallPrompt = event;
+
+            if (drDoctorInstallBanner) {
+
+                drDoctorInstallBanner.style.display =
+                    "block";
+
+            }
+
+        }
+    );
+
+
+    // Install button
+
+    if (drDoctorInstallButton) {
+
+        drDoctorInstallButton.addEventListener(
+            "click",
+            async () => {
+
+                if (!drDoctorInstallPrompt) {
+
+                    return;
+
+                }
+
+                drDoctorInstallPrompt.prompt();
+
+                const installResult =
+                    await drDoctorInstallPrompt.userChoice;
+
+                console.log(
+                    "Dr.Doctor install:",
+                    installResult.outcome
+                );
+
+                drDoctorInstallPrompt = null;
+
+                if (drDoctorInstallBanner) {
+
+                    drDoctorInstallBanner.style.display =
+                        "none";
+
+                }
+
+            }
+        );
+
+    }
+
+
+    // Close button
+
+    if (drDoctorCloseInstall) {
+
+        drDoctorCloseInstall.addEventListener(
+            "click",
+            () => {
+
+                if (drDoctorInstallBanner) {
+
+                    drDoctorInstallBanner.style.display =
+                        "none";
+
+                }
+
+            }
+        );
+
+    }
+
+    </script>
+</body>
+
+</html>

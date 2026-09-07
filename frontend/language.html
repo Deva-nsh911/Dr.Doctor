@@ -1,0 +1,398 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1479c9">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Dr.Doctor">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Choose Language | Dr.Doctor</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eef8ff, #f8fcff);
+            color: #16324f;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            height: 70px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #1479c9;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            background: #1479c9;
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .secure {
+            color: #4d6b82;
+            font-size: 14px;
+        }
+
+        /* MAIN */
+
+        .container {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: #dff2ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 12px;
+            color: #153b5c;
+        }
+
+        .subtitle {
+            font-size: 17px;
+            color: #60798d;
+            margin-bottom: 45px;
+        }
+
+        /* LANGUAGE CARDS */
+
+        .languages {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .language-card {
+            background: white;
+            border: 2px solid #e3edf4;
+            border-radius: 16px;
+            padding: 25px 15px;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .language-card:hover {
+            transform: translateY(-4px);
+            border-color: #39a0e8;
+            box-shadow: 0 8px 25px rgba(20,121,201,0.12);
+        }
+
+        .language-card.selected {
+            border-color: #1479c9;
+            background: #eef8ff;
+            box-shadow: 0 8px 25px rgba(20,121,201,0.15);
+        }
+
+        .language-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 7px;
+            color: #183f5d;
+        }
+
+        .language-native {
+            color: #718797;
+            font-size: 15px;
+        }
+
+        /* BUTTON */
+
+        .continue-btn {
+            margin-top: 40px;
+            width: 260px;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #1479c9;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .continue-btn:hover {
+            background: #0e66ad;
+        }
+
+        .continue-btn:disabled {
+            background: #b9cbd8;
+            cursor: not-allowed;
+        }
+
+        .message {
+            margin-top: 15px;
+            color: #d14b4b;
+            font-size: 14px;
+            min-height: 20px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .secure {
+                display: none;
+            }
+
+            .container {
+                margin: 35px auto;
+            }
+
+            h1 {
+                font-size: 29px;
+            }
+
+            .languages {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 450px) {
+
+            .languages {
+                grid-template-columns: 1fr;
+            }
+
+            .continue-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            <div class="logo-icon">⚕</div>
+            Dr.Doctor
+        </div>
+
+        <div class="secure">
+            🔒 Secure & Confidential
+        </div>
+
+    </nav>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="container">
+
+        <div class="icon">
+            🌐
+        </div>
+
+        <h1>Choose Your Language</h1>
+
+        <p class="subtitle">
+            Select the language you are most comfortable speaking.
+        </p>
+
+
+        <div class="languages">
+
+            <div class="language-card" data-language="English">
+                <div class="language-name">English</div>
+                <div class="language-native">English</div>
+            </div>
+
+
+            <div class="language-card" data-language="Hindi">
+                <div class="language-name">हिन्दी</div>
+                <div class="language-native">Hindi</div>
+            </div>
+
+
+            <div class="language-card" data-language="Punjabi">
+                <div class="language-name">ਪੰਜਾਬੀ</div>
+                <div class="language-native">Punjabi</div>
+            </div>
+
+
+            <div class="language-card" data-language="Bengali">
+                <div class="language-name">বাংলা</div>
+                <div class="language-native">Bengali</div>
+            </div>
+
+
+            <div class="language-card" data-language="Tamil">
+                <div class="language-name">தமிழ்</div>
+                <div class="language-native">Tamil</div>
+            </div>
+
+
+            <div class="language-card" data-language="Telugu">
+                <div class="language-name">తెలుగు</div>
+                <div class="language-native">Telugu</div>
+            </div>
+
+        </div>
+
+
+        <button class="continue-btn" id="continueBtn" disabled>
+            Continue →
+        </button>
+
+        <div class="message" id="message"></div>
+
+    </main>
+
+
+    <script>
+
+        const languageCards =
+            document.querySelectorAll(".language-card");
+
+        const continueBtn =
+            document.getElementById("continueBtn");
+
+        const message =
+            document.getElementById("message");
+
+        let selectedLanguage = null;
+
+
+        // Select language
+
+        languageCards.forEach(card => {
+
+            card.addEventListener("click", () => {
+
+                // Remove previous selection
+
+                languageCards.forEach(item => {
+                    item.classList.remove("selected");
+                });
+
+
+                // Select clicked card
+
+                card.classList.add("selected");
+
+                selectedLanguage =
+                    card.dataset.language;
+
+
+                // Enable button
+
+                continueBtn.disabled = false;
+
+                message.textContent = "";
+
+            });
+
+        });
+
+
+        // Continue
+
+        continueBtn.addEventListener("click", () => {
+
+            if (!selectedLanguage) {
+
+                message.textContent =
+                    "Please select a language first.";
+
+                return;
+            }
+
+
+            // Save language for the next page
+
+            sessionStorage.setItem(
+                "patientLanguage",
+                selectedLanguage
+            );
+
+
+            // Go to next step
+
+            window.location.href =
+                "patient-mode.html";
+
+        });
+
+    </script>
+        <script>
+    if ("serviceWorker" in navigator) {
+
+        window.addEventListener("load", () => {
+
+            navigator.serviceWorker
+                .register("/sw.js")
+                .then(() => {
+
+                    console.log(
+                        "Dr.Doctor PWA service worker registered."
+                    );
+
+                })
+                .catch(error => {
+
+                    console.error(
+                        "PWA registration failed:",
+                        error
+                    );
+
+                });
+
+        });
+
+    }
+    </script>
+</body>
+</html>
+```

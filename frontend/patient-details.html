@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1479c9">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Dr.Doctor">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Patient Details | Dr.Doctor</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f8fc;
+            color: #1e293b;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            height: 70px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 7%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            font-size: 22px;
+            font-weight: 700;
+            color: #1479c9;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 10px;
+
+            background: #1479c9;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .secure {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
+
+        .container {
+            width: min(850px, 92%);
+            margin: 45px auto;
+        }
+
+
+        /* =========================
+           PAGE HEADER
+        ========================= */
+
+        .page-header {
+            margin-bottom: 28px;
+        }
+
+        .step {
+            display: inline-block;
+
+            padding: 6px 11px;
+
+            background: #e8f3fb;
+            color: #1479c9;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+            font-weight: 700;
+
+            margin-bottom: 12px;
+        }
+
+        .page-header h1 {
+            font-size: 30px;
+            color: #12344d;
+
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #64748b;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+
+        /* =========================
+           FORM CARD
+        ========================= */
+
+        .form-card {
+            background: white;
+
+            border-radius: 18px;
+
+            border: 1px solid #e2eaf2;
+
+            box-shadow:
+                0 12px 35px rgba(15, 61, 92, 0.08);
+
+            overflow: hidden;
+        }
+
+
+        /* =========================
+           CARD HEADER
+        ========================= */
+
+        .card-header {
+            padding: 22px 28px;
+
+            background: #f8fbfe;
+
+            border-bottom: 1px solid #e5edf5;
+
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .card-icon {
+            width: 44px;
+            height: 44px;
+
+            border-radius: 12px;
+
+            background: #e8f3fb;
+            color: #1479c9;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 21px;
+        }
+
+        .card-header h2 {
+            font-size: 17px;
+            color: #12344d;
+
+            margin-bottom: 3px;
+        }
+
+        .card-header p {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+
+        /* =========================
+           FORM
+        ========================= */
+
+        form {
+            padding: 30px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+
+            color: #12344d;
+
+            margin-bottom: 18px;
+
+            padding-bottom: 10px;
+
+            border-bottom: 1px solid #edf2f7;
+        }
+
+
+        .form-grid {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 20px;
+        }
+
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+
+        label {
+            font-size: 13px;
+
+            font-weight: 600;
+
+            color: #334155;
+
+            margin-bottom: 7px;
+        }
+
+        .required {
+            color: #dc2626;
+        }
+
+        .optional {
+            color: #94a3b8;
+
+            font-weight: 400;
+
+            margin-left: 4px;
+        }
+
+
+        input,
+        select {
+            width: 100%;
+
+            height: 48px;
+
+            border: 1px solid #cbd5e1;
+
+            border-radius: 9px;
+
+            padding: 0 14px;
+
+            font-size: 14px;
+
+            color: #1e293b;
+
+            background: white;
+
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+
+        input::placeholder {
+            color: #94a3b8;
+        }
+
+
+        input:focus,
+        select:focus {
+            border-color: #1479c9;
+
+            box-shadow:
+                0 0 0 3px rgba(20, 121, 201, 0.10);
+        }
+
+
+        .helper {
+            font-size: 11px;
+
+            color: #94a3b8;
+
+            margin-top: 6px;
+        }
+
+
+        /* =========================
+           PATIENT ID
+        ========================= */
+
+        .patient-id-box {
+            background: #f8fbfe;
+
+            border: 1px solid #dceaf5;
+
+            border-radius: 10px;
+
+            padding: 14px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+        }
+
+        .patient-id-text {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .patient-id-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1479c9;
+            letter-spacing: 0.5px;
+        }
+
+
+        /* =========================
+           PRIVACY BOX
+        ========================= */
+
+        .privacy-box {
+            margin-top: 28px;
+
+            padding: 16px;
+
+            border-radius: 10px;
+
+            background: #f5faf7;
+
+            border: 1px solid #d9eee1;
+
+            display: flex;
+
+            gap: 12px;
+        }
+
+        .privacy-icon {
+            font-size: 18px;
+        }
+
+        .privacy-text {
+            font-size: 12px;
+
+            color: #52705e;
+
+            line-height: 1.6;
+        }
+
+        .privacy-text strong {
+            display: block;
+
+            color: #315c3e;
+
+            margin-bottom: 3px;
+        }
+
+
+        /* =========================
+           BUTTON
+        ========================= */
+
+        .continue-btn {
+            width: 100%;
+
+            height: 50px;
+
+            margin-top: 25px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #1479c9;
+
+            color: white;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .continue-btn:hover {
+            background: #0f67ad;
+        }
+
+        .continue-btn:disabled {
+            background: #94a3b8;
+
+            cursor: not-allowed;
+        }
+
+
+        /* =========================
+           ERROR
+        ========================= */
+
+        .error {
+            display: none;
+
+            margin-top: 15px;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            background: #fff1f2;
+
+            border: 1px solid #fecdd3;
+
+            color: #be123c;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 650px) {
+
+            .navbar {
+                padding: 0 5%;
+            }
+
+            .secure {
+                display: none;
+            }
+
+            .container {
+                margin: 30px auto;
+            }
+
+            .page-header h1 {
+                font-size: 25px;
+            }
+
+            form {
+                padding: 22px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+
+            .patient-id-box {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            +
+        </div>
+
+        Dr.Doctor
+
+    </div>
+
+    <div class="secure">
+        🔒 Secure & Confidential
+    </div>
+
+</nav>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="container">
+
+
+    <div class="page-header">
+
+        <span class="step">
+            STEP 1 OF 4
+        </span>
+
+        <h1>
+            Patient Information
+        </h1>
+
+        <p>
+            Please provide a few basic details before
+            starting your pre-consultation.
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         FORM CARD
+    ========================= -->
+
+    <div class="form-card">
+
+
+        <div class="card-header">
+
+            <div class="card-icon">
+                👤
+            </div>
+
+            <div>
+
+                <h2>
+                    Personal Details
+                </h2>
+
+                <p>
+                    This information helps your doctor
+                    identify and understand your report.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <form id="patientForm">
+
+
+            <div class="section-title">
+                Basic Information
+            </div>
+
+
+            <div class="form-grid">
+
+
+                <!-- NAME -->
+
+                <div class="form-group full">
+
+                    <label for="name">
+                        Full Name
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        placeholder="Enter patient's full name"
+                        autocomplete="name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- AGE -->
+
+                <div class="form-group">
+
+                    <label for="age">
+                        Age
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="number"
+                        id="age"
+                        min="0"
+                        max="120"
+                        placeholder="Enter age"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- GENDER -->
+
+                <div class="form-group">
+
+                    <label for="gender">
+                        Gender
+                        <span class="required">*</span>
+                    </label>
+
+                    <select id="gender" required>
+
+                        <option value="">
+                            Select gender
+                        </option>
+
+                        <option value="Male">
+                            Male
+                        </option>
+
+                        <option value="Female">
+                            Female
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                        <option value="Prefer not to say">
+                            Prefer not to say
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- PHONE -->
+
+                <div class="form-group">
+
+                    <label for="phone">
+
+                        Phone Number
+
+                        <span class="optional">
+                            (Optional)
+                        </span>
+
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        placeholder="Enter phone number"
+                        autocomplete="tel"
+                    >
+
+                </div>
+
+
+                <!-- BLOOD GROUP -->
+
+                <div class="form-group">
+
+                    <label for="bloodGroup">
+
+                        Blood Group
+
+                        <span class="optional">
+                            (Optional)
+                        </span>
+
+                    </label>
+
+                    <select id="bloodGroup">
+
+                        <option value="">
+                            Select blood group
+                        </option>
+
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =========================
+                 PATIENT ID
+            ========================= -->
+
+            <div
+                class="section-title"
+                style="margin-top: 30px;"
+            >
+                Patient Identification
+            </div>
+
+
+            <div class="patient-id-box">
+
+                <div>
+
+                    <div class="patient-id-text">
+                        Patient ID
+                    </div>
+
+                    <div
+                        class="patient-id-value"
+                        id="patientId"
+                    >
+                        Generating...
+                    </div>
+
+                </div>
+
+                <div class="patient-id-text">
+                    Automatically generated
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 PRIVACY
+            ========================= -->
+
+            <div class="privacy-box">
+
+                <div class="privacy-icon">
+                    🔒
+                </div>
+
+                <div class="privacy-text">
+
+                    <strong>
+                        Your information is protected
+                    </strong>
+
+                    Your details are used to prepare your
+                    pre-consultation report for the doctor.
+                    Only provide information that you are
+                    comfortable sharing.
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="error"
+                class="error"
+            >
+                Please check the information you entered.
+            </div>
+
+
+            <!-- =========================
+                 CONTINUE
+            ========================= -->
+
+            <button
+                type="submit"
+                class="continue-btn"
+                id="continueBtn"
+            >
+                Continue to Consultation →
+            </button>
+
+
+        </form>
+
+    </div>
+
+
+</main>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        /* =========================
+           GENERATE PATIENT ID
+        ========================= */
+
+        let patientId =
+            sessionStorage.getItem(
+                "patientId"
+            );
+
+
+        if (!patientId) {
+
+            const randomNumber =
+                Math.floor(
+                    10000 +
+                    Math.random() * 90000
+                );
+
+            patientId =
+                "PT-" + randomNumber;
+
+            sessionStorage.setItem(
+                "patientId",
+                patientId
+            );
+
+        }
+
+
+        document.getElementById(
+            "patientId"
+        ).textContent = patientId;
+
+
+        /* =========================
+           FORM
+        ========================= */
+
+        const form =
+            document.getElementById(
+                "patientForm"
+            );
+
+
+        const error =
+            document.getElementById(
+                "error"
+            );
+
+
+        const continueBtn =
+            document.getElementById(
+                "continueBtn"
+            );
+
+
+        form.addEventListener(
+            "submit",
+            function (event) {
+
+                event.preventDefault();
+
+
+                error.style.display =
+                    "none";
+
+
+                const name =
+                    document
+                        .getElementById("name")
+                        .value
+                        .trim();
+
+
+                const age =
+                    document
+                        .getElementById("age")
+                        .value;
+
+
+                const gender =
+                    document
+                        .getElementById("gender")
+                        .value;
+
+
+                const phone =
+                    document
+                        .getElementById("phone")
+                        .value
+                        .trim();
+
+
+                const bloodGroup =
+                    document
+                        .getElementById("bloodGroup")
+                        .value;
+
+
+                if (
+                    !name ||
+                    !age ||
+                    !gender
+                ) {
+
+                    error.textContent =
+                        "Please fill in all required fields.";
+
+                    error.style.display =
+                        "block";
+
+                    return;
+
+                }
+
+
+                /* =========================
+                   SAVE PATIENT DETAILS
+                ========================= */
+
+                const patientDetails = {
+
+                    patientId:
+                        patientId,
+
+                    name:
+                        name,
+
+                    age:
+                        age,
+
+                    gender:
+                        gender,
+
+                    phone:
+                        phone,
+
+                    bloodGroup:
+                        bloodGroup,
+
+                    consultationDate:
+                        new Date()
+                            .toISOString()
+
+                };
+
+
+                sessionStorage.setItem(
+                    "patientDetails",
+                    JSON.stringify(
+                        patientDetails
+                    )
+                );
+
+
+                /* =========================
+                   BUTTON STATE
+                ========================= */
+
+                continueBtn.disabled =
+                    true;
+
+                continueBtn.textContent =
+                    "Saving Details...";
+
+
+                /* =========================
+                   NEXT PAGE
+                ========================= */
+
+                setTimeout(
+                    function () {
+
+                        window.location.href =
+                            "language.html";
+
+                    },
+                    400
+                );
+
+            }
+        );
+
+    }
+
+);
+
+</script>
+    <script>
+    if ("serviceWorker" in navigator) {
+
+        window.addEventListener("load", () => {
+
+            navigator.serviceWorker
+                .register("/sw.js")
+                .then(() => {
+
+                    console.log(
+                        "Dr.Doctor PWA service worker registered."
+                    );
+
+                })
+                .catch(error => {
+
+                    console.error(
+                        "PWA registration failed:",
+                        error
+                    );
+
+                });
+
+        });
+
+    }
+    </script>
+
+</body>
+
+</html>

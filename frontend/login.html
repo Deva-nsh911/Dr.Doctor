@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Doctor Login | Dr.Doctor</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body class="auth-page">
+
+    <div class="auth-container">
+
+
+        <!-- LEFT -->
+
+        <div class="auth-info">
+
+            <a href="index.html" class="auth-logo">
+                <span>✚</span>
+                Dr.Doctor
+            </a>
+
+            <div class="auth-visual">
+                👨‍⚕️
+            </div>
+
+            <h1>
+                Welcome back,
+                Doctor.
+            </h1>
+
+            <p>
+                Access your dashboard, generate patient
+                access codes and review AI-assisted
+                patient summaries.
+            </p>
+
+            <div class="auth-feature">
+                <span>✓</span>
+                Secure doctor dashboard
+            </div>
+
+            <div class="auth-feature">
+                <span>✓</span>
+                Patient access management
+            </div>
+
+            <div class="auth-feature">
+                <span>✓</span>
+                AI-generated reports
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT -->
+
+        <div class="auth-form-container">
+
+            <div class="auth-form">
+
+                <div class="mobile-logo">
+                    <span>✚</span>
+                    Dr.Doctor
+                </div>
+
+                <p class="form-label">
+                    DOCTOR LOGIN
+                </p>
+
+                <h2>
+                    Welcome back
+                </h2>
+
+                <p class="form-subtitle">
+                    Sign in to continue to your dashboard.
+                </p>
+
+
+                <form id="loginForm">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="doctor@example.com"
+                        required
+                    >
+
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+
+
+                    <button
+                        type="submit"
+                        class="auth-submit"
+                    >
+                        Sign In →
+                    </button>
+
+                </form>
+
+
+                <div id="loginMessage"
+                     class="auth-message">
+                </div>
+
+
+                <p class="auth-switch">
+                    Don't have an account?
+                    <a href="register.html">
+                        Create one
+                    </a>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const loginForm =
+            document.getElementById("loginForm");
+
+        const loginMessage =
+            document.getElementById("loginMessage");
+
+
+        loginForm.addEventListener("submit", async (event) => {
+
+            event.preventDefault();
+
+
+            const email =
+                document.getElementById("email").value.trim();
+
+            const password =
+                document.getElementById("password").value;
+
+
+            try {
+
+                const response = await fetch(
+                    "/api/doctor/login",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            email,
+                            password
+                        })
+                    }
+                );
+
+
+                const data = await response.json();
+
+
+                if (data.success) {
+
+                    loginMessage.textContent =
+                        "Login successful!";
+
+                    loginMessage.className =
+                        "auth-message success";
+
+
+                    setTimeout(() => {
+
+                        window.location.href =
+                            "dashboard.html";
+
+                    }, 700);
+
+                } else {
+
+                    loginMessage.textContent =
+                        data.message;
+
+                    loginMessage.className =
+                        "auth-message error";
+
+                }
+
+            } catch (error) {
+
+                loginMessage.textContent =
+                    "Unable to connect to server.";
+
+                loginMessage.className =
+                    "auth-message error";
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>

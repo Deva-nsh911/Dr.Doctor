@@ -1,0 +1,1935 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1479c9">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Dr.Doctor">
+
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Pre-Consultation Report | Dr.Doctor</title>
+
+    <style>
+
+        /* =====================================================
+           THEME VARIABLES
+        ===================================================== */
+
+        :root {
+
+            --primary: #1479c9;
+            --primary-dark: #0f67ad;
+            --primary-light: #e8f3fb;
+
+            --background: #f4f8fc;
+            --card: #ffffff;
+            --card-soft: #f8fbfe;
+
+            --text: #1e293b;
+            --heading: #12344d;
+            --muted: #64748b;
+
+            --border: #e2eaf2;
+
+            --success: #15945b;
+            --success-light: #e7f7ef;
+
+            --warning: #735b18;
+            --warning-light: #fff8e7;
+            --warning-border: #f5dfaa;
+
+            --shadow:
+                0 15px 40px rgba(15, 61, 92, 0.08);
+
+            --radius: 18px;
+        }
+
+
+        /* =====================================================
+           CALM GREEN
+        ===================================================== */
+
+        [data-theme="green"] {
+
+            --primary: #16845b;
+            --primary-dark: #116d4a;
+            --primary-light: #e7f7ef;
+
+            --background: #f3faf7;
+            --card: #ffffff;
+            --card-soft: #f7fcfa;
+
+            --heading: #174c3a;
+
+            --border: #dceee6;
+
+            --shadow:
+                0 15px 40px rgba(23, 92, 68, 0.08);
+        }
+
+
+        /* =====================================================
+           LAVENDER
+        ===================================================== */
+
+        [data-theme="lavender"] {
+
+            --primary: #7657c5;
+            --primary-dark: #6245aa;
+            --primary-light: #f0ebff;
+
+            --background: #f8f6fd;
+            --card: #ffffff;
+            --card-soft: #faf9fe;
+
+            --heading: #38295f;
+
+            --border: #e7e0f7;
+
+            --shadow:
+                0 15px 40px rgba(82, 61, 130, 0.08);
+        }
+
+
+        /* =====================================================
+           DARK MEDICAL
+        ===================================================== */
+
+        [data-theme="dark"] {
+
+            --primary: #38bdf8;
+            --primary-dark: #0ea5e9;
+            --primary-light: #123047;
+
+            --background: #0b1220;
+            --card: #111c2d;
+            --card-soft: #172337;
+
+            --text: #dbe7f3;
+            --heading: #f1f7fc;
+            --muted: #94a9bd;
+
+            --border: #26384d;
+
+            --success: #34d399;
+            --success-light: #123a32;
+
+            --warning: #f5d77a;
+            --warning-light: #3a3018;
+            --warning-border: #66582b;
+
+            --shadow:
+                0 15px 40px rgba(0, 0, 0, 0.35);
+        }
+
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            background: var(--background);
+
+            color: var(--text);
+
+            min-height: 100vh;
+
+            transition:
+                background 0.3s ease,
+                color 0.3s ease;
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .navbar {
+
+            min-height: 70px;
+
+            background: var(--card);
+
+            border-bottom:
+                1px solid var(--border);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 7%;
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 100;
+
+            transition:
+                background 0.3s ease,
+                border 0.3s ease;
+        }
+
+
+        .logo {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            font-size: 22px;
+
+            font-weight: 800;
+
+            color: var(--primary);
+        }
+
+
+        .logo-icon {
+
+            width: 38px;
+            height: 38px;
+
+            border-radius: 10px;
+
+            background: var(--primary);
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 21px;
+
+            font-weight: bold;
+        }
+
+
+        .nav-right {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+
+        .secure {
+
+            font-size: 13px;
+
+            color: var(--muted);
+        }
+
+
+        /* =====================================================
+           THEME BUTTON
+        ===================================================== */
+
+        .theme-wrapper {
+
+            position: relative;
+        }
+
+
+        .theme-btn {
+
+            height: 40px;
+
+            padding: 0 13px;
+
+            border-radius: 9px;
+
+            border: 1px solid var(--border);
+
+            background: var(--card);
+
+            color: var(--text);
+
+            cursor: pointer;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            transition: 0.2s;
+        }
+
+
+        .theme-btn:hover {
+
+            border-color: var(--primary);
+
+            color: var(--primary);
+        }
+
+
+        .theme-menu {
+
+            display: none;
+
+            position: absolute;
+
+            top: 48px;
+
+            right: 0;
+
+            width: 205px;
+
+            background: var(--card);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 13px;
+
+            padding: 8px;
+
+            box-shadow: var(--shadow);
+
+            z-index: 200;
+        }
+
+
+        .theme-menu.show {
+            display: block;
+        }
+
+
+        .theme-option {
+
+            width: 100%;
+
+            padding: 11px 12px;
+
+            border: none;
+
+            background: transparent;
+
+            color: var(--text);
+
+            border-radius: 8px;
+
+            text-align: left;
+
+            cursor: pointer;
+
+            font-size: 13px;
+
+            transition: 0.2s;
+        }
+
+
+        .theme-option:hover {
+
+            background: var(--primary-light);
+
+            color: var(--primary);
+        }
+
+
+        /* =====================================================
+           MAIN CONTAINER
+        ===================================================== */
+
+        .container {
+
+            width: min(980px, 92%);
+
+            margin: 45px auto 60px;
+        }
+
+
+        /* =====================================================
+           PAGE HEADER
+        ===================================================== */
+
+        .page-header {
+
+            text-align: center;
+
+            margin-bottom: 32px;
+        }
+
+
+        .success-icon {
+
+            width: 68px;
+            height: 68px;
+
+            margin: 0 auto 17px;
+
+            border-radius: 50%;
+
+            background: var(--success-light);
+
+            color: var(--success);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 31px;
+
+            font-weight: bold;
+
+            border:
+                1px solid rgba(21, 148, 91, 0.15);
+        }
+
+
+        .page-header h1 {
+
+            font-size: 31px;
+
+            color: var(--heading);
+
+            margin-bottom: 9px;
+
+            letter-spacing: -0.5px;
+        }
+
+
+        .page-header p {
+
+            color: var(--muted);
+
+            line-height: 1.6;
+
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           REPORT CARD
+        ===================================================== */
+
+        .report-card {
+
+            background: var(--card);
+
+            border-radius: var(--radius);
+
+            border:
+                1px solid var(--border);
+
+            box-shadow: var(--shadow);
+
+            overflow: hidden;
+        }
+
+
+        /* =====================================================
+           REPORT TOP HEADER
+        ===================================================== */
+
+        .report-header {
+
+            padding: 22px 28px;
+
+            background: var(--card-soft);
+
+            border-bottom:
+                1px solid var(--border);
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+
+        .report-title {
+
+            font-size: 18px;
+
+            font-weight: 750;
+
+            color: var(--heading);
+        }
+
+
+        .report-subtitle {
+
+            margin-top: 4px;
+
+            font-size: 12px;
+
+            color: var(--muted);
+        }
+
+
+        .report-badge {
+
+            background: var(--primary-light);
+
+            color: var(--primary);
+
+            padding: 7px 12px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+
+        /* =====================================================
+           PATIENT INFORMATION
+        ===================================================== */
+
+        .patient-section {
+
+            padding: 27px 30px 10px;
+        }
+
+
+        .section-heading {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .section-icon {
+
+            width: 34px;
+            height: 34px;
+
+            border-radius: 9px;
+
+            background: var(--primary-light);
+
+            color: var(--primary);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 16px;
+        }
+
+
+        .section-heading h2 {
+
+            color: var(--heading);
+
+            font-size: 16px;
+        }
+
+
+        .section-heading p {
+
+            color: var(--muted);
+
+            font-size: 11px;
+
+            margin-top: 2px;
+        }
+
+
+        .patient-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 12px;
+        }
+
+
+        .patient-field {
+
+            background: var(--card-soft);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 11px;
+
+            padding: 14px;
+
+            min-height: 70px;
+        }
+
+
+        .patient-field.full {
+
+            grid-column: 1 / -1;
+        }
+
+
+        .field-label {
+
+            color: var(--muted);
+
+            font-size: 11px;
+
+            margin-bottom: 6px;
+
+            font-weight: 600;
+        }
+
+
+        .field-value {
+
+            color: var(--text);
+
+            font-size: 14px;
+
+            font-weight: 650;
+
+            word-break: break-word;
+        }
+
+
+        /* =====================================================
+           DIVIDER
+        ===================================================== */
+
+        .divider {
+
+            height: 1px;
+
+            background: var(--border);
+
+            margin: 25px 30px 0;
+        }
+
+
+        /* =====================================================
+           AI REPORT
+        ===================================================== */
+
+        .report-content {
+
+            padding: 28px 30px 30px;
+        }
+
+
+        .ai-label {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding: 6px 10px;
+
+            border-radius: 7px;
+
+            background: var(--primary-light);
+
+            color: var(--primary);
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            margin-bottom: 18px;
+        }
+
+
+        #reportText {
+
+            white-space: pre-wrap;
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            font-size: 14px;
+
+            line-height: 1.85;
+
+            color: var(--text);
+        }
+
+
+        /* =====================================================
+           REPORT TEXT FORMATTING
+        ===================================================== */
+
+        .report-section {
+
+            margin-bottom: 23px;
+
+            padding-bottom: 20px;
+
+            border-bottom:
+                1px solid var(--border);
+        }
+
+
+        .report-section:last-child {
+
+            border-bottom: none;
+
+            margin-bottom: 0;
+
+            padding-bottom: 0;
+        }
+
+
+        .report-section-title {
+
+            color: var(--heading);
+
+            font-size: 15px;
+
+            font-weight: 750;
+
+            margin-bottom: 8px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+        }
+
+
+        .report-section-title::before {
+
+            content: "";
+
+            width: 4px;
+
+            height: 18px;
+
+            border-radius: 5px;
+
+            background: var(--primary);
+
+            display: inline-block;
+        }
+
+
+        .report-section-content {
+
+            color: var(--text);
+
+            line-height: 1.75;
+
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           IMPORTANT NOTICE
+        ===================================================== */
+
+        .notice {
+
+            margin-top: 28px;
+
+            padding: 17px 18px;
+
+            border-radius: 12px;
+
+            background: var(--warning-light);
+
+            border:
+                1px solid var(--warning-border);
+
+            color: var(--warning);
+
+            font-size: 12px;
+
+            line-height: 1.65;
+
+            display: flex;
+
+            gap: 11px;
+        }
+
+
+        .notice-icon {
+
+            font-size: 18px;
+
+            flex-shrink: 0;
+        }
+
+
+        .notice strong {
+
+            display: block;
+
+            margin-bottom: 4px;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           ACTIONS
+        ===================================================== */
+
+        .actions {
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin-top: 28px;
+        }
+
+
+        .action-btn {
+
+            min-width: 155px;
+
+            height: 46px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            padding: 0 20px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.2s,
+                background 0.2s,
+                border 0.2s;
+        }
+
+
+        .action-btn:hover {
+
+            transform: translateY(-1px);
+        }
+
+
+        .print-btn {
+
+            background: var(--primary);
+
+            color: white;
+        }
+
+
+        .print-btn:hover {
+
+            background: var(--primary-dark);
+        }
+
+
+        .home-btn {
+
+            background: var(--card);
+
+            color: var(--primary);
+
+            border:
+                1px solid var(--border);
+        }
+
+
+        .home-btn:hover {
+
+            border-color: var(--primary);
+
+            background: var(--primary-light);
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .footer {
+
+            text-align: center;
+
+            margin-top: 30px;
+
+            color: var(--muted);
+
+            font-size: 11px;
+        }
+
+
+        /* =====================================================
+           LOADING
+        ===================================================== */
+
+        .loading {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            color: var(--muted);
+        }
+
+
+        .loading-dot {
+
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: var(--primary);
+
+            animation:
+                pulse 1s infinite alternate;
+        }
+
+
+        @keyframes pulse {
+
+            from {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 700px) {
+
+            .navbar {
+
+                padding: 0 5%;
+            }
+
+
+            .secure {
+
+                display: none;
+            }
+
+
+            .nav-right {
+
+                gap: 8px;
+            }
+
+
+            .container {
+
+                width: 94%;
+
+                margin:
+                    30px auto 45px;
+            }
+
+
+            .page-header h1 {
+
+                font-size: 25px;
+            }
+
+
+            .report-header {
+
+                padding: 18px;
+
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+
+            .patient-section {
+
+                padding: 23px 20px 8px;
+            }
+
+
+            .patient-grid {
+
+                grid-template-columns: 1fr 1fr;
+            }
+
+
+            .report-content {
+
+                padding: 23px 20px 25px;
+            }
+
+
+            .divider {
+
+                margin-left: 20px;
+
+                margin-right: 20px;
+            }
+
+        }
+
+
+        @media (max-width: 480px) {
+
+            .logo {
+
+                font-size: 18px;
+            }
+
+
+            .logo-icon {
+
+                width: 34px;
+                height: 34px;
+
+                font-size: 18px;
+            }
+
+
+            .theme-btn {
+
+                font-size: 12px;
+
+                padding: 0 9px;
+            }
+
+
+            .patient-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .patient-field.full {
+
+                grid-column: auto;
+            }
+
+
+            .actions {
+
+                flex-direction: column;
+            }
+
+
+            .action-btn {
+
+                width: 100%;
+            }
+
+        }
+
+
+        /* =====================================================
+           PRINT
+        ===================================================== */
+
+        @media print {
+
+            @page {
+
+                margin: 15mm;
+            }
+
+
+            body {
+
+                background: white;
+
+                color: #1f2937;
+            }
+
+
+            .navbar,
+            .theme-wrapper,
+            .actions,
+            .footer {
+
+                display: none !important;
+            }
+
+
+            .container {
+
+                width: 100%;
+
+                margin: 0;
+            }
+
+
+            .page-header {
+
+                margin-bottom: 20px;
+            }
+
+
+            .success-icon {
+
+                width: 45px;
+                height: 45px;
+
+                font-size: 20px;
+            }
+
+
+            .report-card {
+
+                box-shadow: none;
+
+                border: 1px solid #ddd;
+            }
+
+
+            .patient-field {
+
+                background: white;
+
+                border: 1px solid #ddd;
+            }
+
+
+            .report-section {
+
+                break-inside: avoid;
+            }
+
+
+            .notice {
+
+                break-inside: avoid;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            +
+        </div>
+
+        Dr.Doctor
+
+    </div>
+
+
+    <div class="nav-right">
+
+
+        <div class="secure">
+            🔒 Secure & Confidential
+        </div>
+
+
+        <!-- THEME -->
+
+        <div class="theme-wrapper">
+
+
+            <button
+                class="theme-btn"
+                id="themeBtn"
+                type="button"
+            >
+                🎨 Theme
+            </button>
+
+
+            <div
+                class="theme-menu"
+                id="themeMenu"
+            >
+
+                <button
+                    class="theme-option"
+                    onclick="setTheme('blue')"
+                >
+                    🔵 Clinical Blue
+                </button>
+
+                <button
+                    class="theme-option"
+                    onclick="setTheme('green')"
+                >
+                    🟢 Calm Green
+                </button>
+
+                <button
+                    class="theme-option"
+                    onclick="setTheme('lavender')"
+                >
+                    🟣 Lavender
+                </button>
+
+                <button
+                    class="theme-option"
+                    onclick="setTheme('dark')"
+                >
+                    ⚫ Dark Medical
+                </button>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</nav>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="container">
+
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+
+        <h1>
+            Consultation Summary Ready
+        </h1>
+
+
+        <p>
+            Your pre-consultation information has been
+            organized for review by your doctor.
+        </p>
+
+
+    </div>
+
+
+
+    <!-- =================================================
+         REPORT CARD
+    ================================================= -->
+
+    <div class="report-card">
+
+
+        <!-- REPORT HEADER -->
+
+        <div class="report-header">
+
+
+            <div>
+
+                <div class="report-title">
+                    Patient Pre-Consultation Report
+                </div>
+
+                <div class="report-subtitle">
+                    AI-assisted history summary
+                </div>
+
+            </div>
+
+
+            <div class="report-badge">
+                PRE-CONSULTATION
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             PATIENT INFORMATION
+        ================================================= -->
+
+        <section class="patient-section">
+
+
+            <div class="section-heading">
+
+
+                <div class="section-icon">
+                    👤
+                </div>
+
+
+                <div>
+
+                    <h2>
+                        Patient Information
+                    </h2>
+
+                    <p>
+                        Details provided before the consultation
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="patient-grid">
+
+
+                <div class="patient-field full">
+
+                    <div class="field-label">
+                        Full Name
+                    </div>
+
+                    <div
+                        class="field-value"
+                        id="patientName"
+                    >
+                        Not provided
+                    </div>
+
+                </div>
+
+
+                <div class="patient-field">
+
+                    <div class="field-label">
+                        Patient ID
+                    </div>
+
+                    <div
+                        class="field-value"
+                        id="patientId"
+                    >
+                        Not provided
+                    </div>
+
+                </div>
+
+
+                <div class="patient-field">
+
+                    <div class="field-label">
+                        Age
+                    </div>
+
+                    <div
+                        class="field-value"
+                        id="patientAge"
+                    >
+                        Not provided
+                    </div>
+
+                </div>
+
+
+                <div class="patient-field">
+
+                    <div class="field-label">
+                        Gender
+                    </div>
+
+                    <div
+                        class="field-value"
+                        id="patientGender"
+                    >
+                        Not provided
+                    </div>
+
+                </div>
+
+
+                <div class="patient-field">
+
+                    <div class="field-label">
+                        Phone
+                    </div>
+
+                    <div
+                        class="field-value"
+                        id="patientPhone"
+                    >
+                        Not provided
+                    </div>
+
+                </div>
+
+
+                <div class="patient-field">
+
+                    <div class="field-label">
+                        Blood Group
+                    </div>
+
+                    <div
+                        class="field-value"
+                        id="patientBloodGroup"
+                    >
+                        Not provided
+                    </div>
+
+                </div>
+
+
+                <div class="patient-field">
+
+                    <div class="field-label">
+                        Consultation Date
+                    </div>
+
+                    <div
+                        class="field-value"
+                        id="consultationDate"
+                    >
+                        Not provided
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <div class="divider"></div>
+
+
+
+        <!-- =================================================
+             AI REPORT
+        ================================================= -->
+
+        <section class="report-content">
+
+
+            <div class="ai-label">
+                ✨ AI-GENERATED SUMMARY
+            </div>
+
+
+            <div id="reportText">
+
+                <div class="loading">
+
+                    <span class="loading-dot"></span>
+
+                    Loading your report...
+
+                </div>
+
+            </div>
+
+
+
+            <!-- IMPORTANT NOTICE -->
+
+            <div class="notice">
+
+
+                <div class="notice-icon">
+                    ⚠️
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Important Medical Notice
+                    </strong>
+
+                    This report is a pre-consultation
+                    summary created from the information
+                    provided by the patient. It is not a
+                    medical diagnosis or prescription.
+                    The treating doctor should review this
+                    information before making medical
+                    decisions.
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+    </div>
+
+
+
+    <!-- =================================================
+         ACTION BUTTONS
+    ================================================= -->
+
+    <div class="actions">
+
+
+        <button
+            class="action-btn print-btn"
+            onclick="window.print()"
+        >
+            🖨 Print / Save PDF
+        </button>
+
+
+        <button
+            class="action-btn home-btn"
+            onclick="goHome()"
+        >
+            ← Back to Home
+        </button>
+
+
+    </div>
+
+
+
+    <div class="footer">
+
+        Dr.Doctor • AI-Assisted Pre-Consultation
+
+    </div>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+/* =====================================================
+   LOAD PATIENT DETAILS
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        /* ---------------------------------------------
+           PATIENT DETAILS
+        --------------------------------------------- */
+
+        const savedPatientDetails =
+            sessionStorage.getItem(
+                "patientDetails"
+            );
+
+
+        if (savedPatientDetails) {
+
+            try {
+
+                const patient =
+                    JSON.parse(
+                        savedPatientDetails
+                    );
+
+
+                document.getElementById(
+                    "patientName"
+                ).textContent =
+                    patient.name ||
+                    "Not provided";
+
+
+                document.getElementById(
+                    "patientId"
+                ).textContent =
+                    patient.patientId ||
+                    "Not provided";
+
+
+                document.getElementById(
+                    "patientAge"
+                ).textContent =
+                    patient.age ||
+                    "Not provided";
+
+
+                document.getElementById(
+                    "patientGender"
+                ).textContent =
+                    patient.gender ||
+                    "Not provided";
+
+
+                document.getElementById(
+                    "patientPhone"
+                ).textContent =
+                    patient.phone ||
+                    "Not provided";
+
+
+                document.getElementById(
+                    "patientBloodGroup"
+                ).textContent =
+                    patient.bloodGroup ||
+                    "Not provided";
+
+
+                if (patient.consultationDate) {
+
+                    const date =
+                        new Date(
+                            patient.consultationDate
+                        );
+
+
+                    document.getElementById(
+                        "consultationDate"
+                    ).textContent =
+                        date.toLocaleDateString(
+                            undefined,
+                            {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric"
+                            }
+                        );
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Patient details loading error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+
+        /* ---------------------------------------------
+           LOAD AI REPORT
+        --------------------------------------------- */
+
+        const reportText =
+            document.getElementById(
+                "reportText"
+            );
+
+
+        const savedReport =
+            sessionStorage.getItem(
+                "patientReport"
+            );
+
+
+        if (!savedReport) {
+
+            reportText.textContent =
+                "No consultation report was found.";
+
+            return;
+
+        }
+
+
+        try {
+
+            const report =
+                JSON.parse(
+                    savedReport
+                );
+
+
+            if (!report) {
+
+                reportText.textContent =
+                    "No consultation report was found.";
+
+                return;
+
+            }
+
+
+            /*
+             * Keep the AI report exactly as generated.
+             * The browser displays it with proper spacing.
+             */
+
+            reportText.textContent =
+                report;
+
+        }
+
+
+        catch (error) {
+
+            console.error(
+                "Report loading error:",
+                error
+            );
+
+
+            reportText.textContent =
+                "Unable to load the consultation report.";
+
+        }
+
+    }
+
+);
+
+
+
+/* =====================================================
+   THEME MENU
+===================================================== */
+
+const themeBtn =
+    document.getElementById(
+        "themeBtn"
+    );
+
+
+const themeMenu =
+    document.getElementById(
+        "themeMenu"
+    );
+
+
+themeBtn.addEventListener(
+    "click",
+    function (event) {
+
+        event.stopPropagation();
+
+        themeMenu.classList.toggle(
+            "show"
+        );
+
+    }
+);
+
+
+
+/* Close theme menu */
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        if (
+            !themeMenu.contains(event.target) &&
+            event.target !== themeBtn
+        ) {
+
+            themeMenu.classList.remove(
+                "show"
+            );
+
+        }
+
+    }
+);
+
+
+
+/* =====================================================
+   SET THEME
+===================================================== */
+
+function setTheme(theme) {
+
+
+    if (theme === "blue") {
+
+        document.documentElement.removeAttribute(
+            "data-theme"
+        );
+
+    }
+
+    else {
+
+        document.documentElement.setAttribute(
+            "data-theme",
+            theme
+        );
+
+    }
+
+
+    localStorage.setItem(
+        "reportTheme",
+        theme
+    );
+
+
+    themeMenu.classList.remove(
+        "show"
+    );
+
+}
+
+
+
+/* =====================================================
+   LOAD SAVED THEME
+===================================================== */
+
+const savedTheme =
+    localStorage.getItem(
+        "reportTheme"
+    );
+
+
+if (savedTheme) {
+
+    setTheme(
+        savedTheme
+    );
+
+}
+
+
+
+/* =====================================================
+   GO HOME
+===================================================== */
+
+function goHome() {
+
+    window.location.href =
+        "patient.html";
+
+}
+
+
+</script>
+    <script>
+    if ("serviceWorker" in navigator) {
+
+        window.addEventListener("load", () => {
+
+            navigator.serviceWorker
+                .register("/sw.js")
+                .then(() => {
+
+                    console.log(
+                        "Dr.Doctor PWA service worker registered."
+                    );
+
+                })
+                .catch(error => {
+
+                    console.error(
+                        "PWA registration failed:",
+                        error
+                    );
+
+                });
+
+        });
+
+    }
+    </script>
+
+
+</body>
+
+</html>

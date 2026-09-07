@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Patient Report | Dr.Doctor</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f8fc;
+            color: #1e293b;
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            height: 70px;
+
+            background: white;
+
+            border-bottom: 1px solid #e2e8f0;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 40px;
+
+            position: sticky;
+            top: 0;
+
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: #1479c9;
+        }
+
+        .back-btn {
+            border: none;
+
+            background: #eef6fc;
+            color: #1479c9;
+
+            padding: 10px 16px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-weight: 600;
+        }
+
+        .back-btn:hover {
+            background: #dceefb;
+        }
+
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .container {
+            max-width: 1100px;
+
+            margin: auto;
+
+            padding: 40px 25px;
+        }
+
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+        .page-title h1 {
+            color: #12344d;
+
+            font-size: 30px;
+
+            margin-bottom: 8px;
+        }
+
+        .page-title p {
+            color: #64748b;
+        }
+
+
+        /* =========================
+           PATIENT CARD
+        ========================= */
+
+        .patient-card {
+            background: white;
+
+            border: 1px solid #e2eaf2;
+
+            border-radius: 18px;
+
+            padding: 25px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 10px 30px rgba(15, 61, 92, 0.06);
+        }
+
+        .patient-card h2 {
+            color: #12344d;
+
+            margin-bottom: 20px;
+
+            font-size: 21px;
+        }
+
+
+        .patient-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+        }
+
+
+        .info-item {
+            background: #f8fbfe;
+
+            border-radius: 12px;
+
+            padding: 15px;
+        }
+
+        .info-label {
+            font-size: 12px;
+
+            color: #64748b;
+
+            margin-bottom: 6px;
+        }
+
+        .info-value {
+            font-weight: 600;
+
+            color: #12344d;
+
+            word-break: break-word;
+        }
+
+
+        /* =========================
+           REPORT CARD
+        ========================= */
+
+        .report-card {
+            background: white;
+
+            border: 1px solid #e2eaf2;
+
+            border-radius: 18px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 10px 30px rgba(15, 61, 92, 0.06);
+        }
+
+
+        .report-header {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 20px;
+        }
+
+
+        .report-header h2 {
+            color: #12344d;
+        }
+
+
+        .print-btn {
+            border: none;
+
+            background: #1479c9;
+
+            color: white;
+
+            padding: 10px 16px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-weight: 600;
+        }
+
+        .print-btn:hover {
+            background: #0f67ad;
+        }
+
+
+        /* =========================
+           REPORT TEXT
+        ========================= */
+
+        #reportText {
+            white-space: pre-wrap;
+
+            line-height: 1.8;
+
+            font-size: 15px;
+
+            color: #334155;
+
+            background: #f8fbfe;
+
+            border: 1px solid #e5edf4;
+
+            border-radius: 12px;
+
+            padding: 25px;
+
+            overflow-wrap: break-word;
+        }
+
+
+        /* =========================
+           NOTICE
+        ========================= */
+
+        .notice {
+            margin-top: 25px;
+
+            padding: 18px;
+
+            border-radius: 12px;
+
+            background: #fff8e7;
+
+            border: 1px solid #f5dfaa;
+
+            color: #735b18;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           LOADING
+        ========================= */
+
+        .loading {
+            text-align: center;
+
+            padding: 60px;
+
+            color: #64748b;
+
+            font-size: 16px;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 750px) {
+
+            .navbar {
+                padding: 0 18px;
+            }
+
+            .container {
+                padding: 30px 15px;
+            }
+
+            .patient-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .report-header {
+                flex-direction: column;
+
+                align-items: stretch;
+
+                gap: 15px;
+            }
+
+            .print-btn {
+                width: 100%;
+            }
+
+        }
+
+
+        /* =========================
+           PRINT
+        ========================= */
+
+        @media print {
+
+            .navbar,
+            .back-btn,
+            .print-btn {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .container {
+                max-width: none;
+
+                padding: 0;
+            }
+
+            .patient-card,
+            .report-card {
+                box-shadow: none;
+
+                border: 1px solid #ddd;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            Dr.Doctor
+        </div>
+
+        <button
+            class="back-btn"
+            onclick="goBack()">
+
+            ← Back to Dashboard
+
+        </button>
+
+    </nav>
+
+
+
+    <!-- MAIN -->
+
+    <main class="container">
+
+
+        <div class="page-title">
+
+            <h1>
+                Patient Report
+            </h1>
+
+            <p>
+                Pre-consultation history prepared for
+                doctor review.
+            </p>
+
+        </div>
+
+
+
+        <!-- PATIENT INFORMATION -->
+
+        <section class="patient-card">
+
+            <h2>
+                Patient Information
+            </h2>
+
+
+            <div class="patient-grid">
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+                        Patient Name
+                    </div>
+
+                    <div
+                        class="info-value"
+                        id="patientName">
+
+                        Loading...
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+                        Patient ID
+                    </div>
+
+                    <div
+                        class="info-value"
+                        id="patientId">
+
+                        Loading...
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+                        Age
+                    </div>
+
+                    <div
+                        class="info-value"
+                        id="patientAge">
+
+                        Loading...
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+                        Gender
+                    </div>
+
+                    <div
+                        class="info-value"
+                        id="patientGender">
+
+                        Loading...
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+                        Phone
+                    </div>
+
+                    <div
+                        class="info-value"
+                        id="patientPhone">
+
+                        Loading...
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+                        Blood Group
+                    </div>
+
+                    <div
+                        class="info-value"
+                        id="bloodGroup">
+
+                        Loading...
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+                        Language
+                    </div>
+
+                    <div
+                        class="info-value"
+                        id="language">
+
+                        Loading...
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+                        Consultation Date
+                    </div>
+
+                    <div
+                        class="info-value"
+                        id="consultationDate">
+
+                        Loading...
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- REPORT -->
+
+        <section class="report-card">
+
+
+            <div class="report-header">
+
+                <h2>
+                    AI Pre-Consultation Report
+                </h2>
+
+                <button
+                    class="print-btn"
+                    onclick="window.print()">
+
+                    🖨 Print Report
+
+                </button>
+
+            </div>
+
+
+            <div
+                id="reportText"
+                class="loading">
+
+                Loading report...
+
+            </div>
+
+
+            <div class="notice">
+
+                <strong>Medical Notice:</strong>
+
+                This report is an AI-generated
+                pre-consultation history summary.
+                It is intended to assist the doctor
+                during consultation and is not a
+                diagnosis or prescription.
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+<script>
+
+
+    /*
+       GET SELECTED CONSULTATION
+    */
+
+    const consultationId =
+        sessionStorage.getItem(
+            "selectedConsultationId"
+        );
+
+
+    /*
+       IF NO CONSULTATION ID
+    */
+
+    if (!consultationId) {
+
+        document.getElementById(
+            "reportText"
+        ).textContent =
+            "No consultation was selected.";
+
+    } else {
+
+        loadReport();
+
+    }
+
+
+
+    /*
+       LOAD REPORT
+    */
+
+    async function loadReport() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/doctor/consultation/"
+                    + consultationId
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!data.success) {
+
+                document.getElementById(
+                    "reportText"
+                ).textContent =
+                    data.message ||
+                    "Unable to load report.";
+
+                return;
+
+            }
+
+
+            const consultation =
+                data.consultation;
+
+
+            /*
+               PATIENT INFORMATION
+            */
+
+            document.getElementById(
+                "patientName"
+            ).textContent =
+                consultation.patient_name
+                || "Not provided";
+
+
+            document.getElementById(
+                "patientId"
+            ).textContent =
+                consultation.patient_id
+                || "Not provided";
+
+
+            document.getElementById(
+                "patientAge"
+            ).textContent =
+                consultation.patient_age
+                || "Not provided";
+
+
+            document.getElementById(
+                "patientGender"
+            ).textContent =
+                consultation.patient_gender
+                || "Not provided";
+
+
+            document.getElementById(
+                "patientPhone"
+            ).textContent =
+                consultation.patient_phone
+                || "Not provided";
+
+
+            document.getElementById(
+                "bloodGroup"
+            ).textContent =
+                consultation.patient_blood_group
+                || "Not provided";
+
+
+            document.getElementById(
+                "language"
+            ).textContent =
+                consultation.language
+                || "English";
+
+
+            document.getElementById(
+                "consultationDate"
+            ).textContent =
+                formatDate(
+                    consultation.created_at
+                );
+
+
+            /*
+               REPORT
+            */
+
+            const reportText =
+                document.getElementById(
+                    "reportText"
+                );
+
+            reportText.classList.remove(
+                "loading"
+            );
+
+            reportText.textContent =
+                consultation.report
+                || "No report available.";
+
+
+        } catch (error) {
+
+            console.error(
+                "Report loading error:",
+                error
+            );
+
+            document.getElementById(
+                "reportText"
+            ).textContent =
+                "Unable to load the report.";
+
+        }
+
+    }
+
+
+
+    /*
+       FORMAT DATE
+    */
+
+    function formatDate(date) {
+
+        if (!date) {
+            return "Not provided";
+        }
+
+        return new Date(date)
+            .toLocaleDateString(
+                "en-IN",
+                {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }
+            );
+
+    }
+
+
+
+    /*
+       BACK TO DASHBOARD
+    */
+
+    function goBack() {
+
+        window.location.href =
+            "dashboard.html";
+
+    }
+
+</script>
+
+
+</body>
+
+</html>

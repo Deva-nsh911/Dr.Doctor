@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register | Dr.Doctor</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="auth-page">
+
+    <div class="auth-container">
+
+        <!-- LEFT SIDE -->
+
+        <div class="auth-info">
+
+            <a href="index.html" class="auth-logo">
+                <span>✚</span>
+                Dr.Doctor
+            </a>
+
+            <div class="auth-visual">
+                🩺
+            </div>
+
+            <h1>
+                Smarter consultations
+                start here.
+            </h1>
+
+            <p>
+                Create your doctor account and let
+                Dr.Doctor help you collect meaningful
+                patient information before every consultation.
+            </p>
+
+            <div class="auth-feature">
+                <span>✓</span>
+                AI-assisted patient interviews
+            </div>
+
+            <div class="auth-feature">
+                <span>✓</span>
+                Voice & text support
+            </div>
+
+            <div class="auth-feature">
+                <span>✓</span>
+                Structured patient summaries
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+
+        <div class="auth-form-container">
+
+            <div class="auth-form">
+
+                <div class="mobile-logo">
+                    <span>✚</span>
+                    Dr.Doctor
+                </div>
+
+                <p class="form-label">
+                    DOCTOR ACCOUNT
+                </p>
+
+                <h2>
+                    Create your account
+                </h2>
+
+                <p class="form-subtitle">
+                    Start using Dr.Doctor with your patients.
+                </p>
+
+
+                <form id="registerForm">
+
+                    <label for="name">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        placeholder="Dr. John Sharma"
+                        required
+                    >
+
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="doctor@example.com"
+                        required
+                    >
+
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Minimum 6 characters"
+                        required
+                    >
+
+
+                    <label for="confirmPassword">
+                        Confirm Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Enter password again"
+                        required
+                    >
+
+
+                    <button
+                        type="submit"
+                        class="auth-submit"
+                    >
+                        Create Doctor Account
+                    </button>
+
+                </form>
+
+
+                <div id="registerMessage"
+                     class="auth-message">
+                </div>
+
+
+                <p class="auth-switch">
+                    Already have an account?
+                    <a href="login.html">
+                        Sign in
+                    </a>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const registerForm =
+            document.getElementById("registerForm");
+
+        const registerMessage =
+            document.getElementById("registerMessage");
+
+
+        registerForm.addEventListener("submit", async (event) => {
+
+            event.preventDefault();
+
+            const name =
+                document.getElementById("name").value.trim();
+
+            const email =
+                document.getElementById("email").value.trim();
+
+            const password =
+                document.getElementById("password").value;
+
+            const confirmPassword =
+                document.getElementById("confirmPassword").value;
+
+
+            if (password !== confirmPassword) {
+
+                registerMessage.textContent =
+                    "Passwords do not match.";
+
+                registerMessage.className =
+                    "auth-message error";
+
+                return;
+            }
+
+
+            try {
+
+                const response = await fetch(
+                    "/api/doctor/register",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            name,
+                            email,
+                            password
+                        })
+                    }
+                );
+
+
+                const data = await response.json();
+
+
+                if (data.success) {
+
+                    registerMessage.textContent =
+                        "Account created! Redirecting to login...";
+
+                    registerMessage.className =
+                        "auth-message success";
+
+
+                    setTimeout(() => {
+
+                        window.location.href =
+                            "login.html";
+
+                    }, 1200);
+
+                } else {
+
+                    registerMessage.textContent =
+                        data.message;
+
+                    registerMessage.className =
+                        "auth-message error";
+                }
+
+            } catch (error) {
+
+                registerMessage.textContent =
+                    "Unable to connect to server.";
+
+                registerMessage.className =
+                    "auth-message error";
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>

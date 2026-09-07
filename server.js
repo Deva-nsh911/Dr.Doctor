@@ -10,6 +10,8 @@ const Groq = require("groq-sdk");
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 
 // =====================================================
 // ENVIRONMENT CHECK

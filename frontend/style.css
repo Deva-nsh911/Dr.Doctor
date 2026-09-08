@@ -2456,3 +2456,232 @@ footer p {
     }
 
 }
+
+/* =========================================
+   PATIENT HISTORY
+========================================= */
+
+.history-section {
+    margin-bottom: 45px;
+}
+
+.history-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 18px;
+}
+
+.history-header h2 {
+    margin: 0 0 6px;
+    font-size: 23px;
+    color: #17384d;
+}
+
+.history-header p {
+    margin: 0;
+    color: #7a8c97;
+    font-size: 13px;
+}
+
+/* Search */
+
+.history-search {
+    width: 260px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 0 13px;
+    background: white;
+    border: 1px solid #dce8ee;
+    border-radius: 10px;
+}
+
+.history-search span {
+    font-size: 15px;
+    opacity: 0.65;
+}
+
+.history-search input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #29495b;
+    font-size: 13px;
+}
+
+.history-search input::placeholder {
+    color: #9aaab3;
+}
+
+/* Main card */
+
+.history-card {
+    background: white;
+    border: 1px solid #e0ebf1;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(25, 75, 100, 0.04);
+}
+
+/* Table */
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+}
+
+.history-table thead {
+    background: #f7fafc;
+}
+
+.history-table th {
+    padding: 15px 18px;
+    text-align: left;
+    color: #718692;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #e5edf1;
+}
+
+.history-table td {
+    padding: 17px 18px;
+    color: #435e6d;
+    font-size: 13px;
+    border-bottom: 1px solid #edf2f5;
+    vertical-align: middle;
+}
+
+.history-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.history-table tbody tr:hover {
+    background: #f8fbfd;
+}
+
+.history-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Patient name */
+
+.history-table td:first-child {
+    color: #17384d;
+    font-weight: 700;
+}
+
+/* View Report button */
+
+.view-btn {
+    border: none;
+    background: #eaf4ff;
+    color: #1261a0;
+    padding: 8px 13px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.view-btn:hover {
+    background: #1261a0;
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* Status */
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: #e8f8f3;
+    color: #078878;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    margin-right: 6px;
+    border-radius: 50%;
+    background: #12a886;
+}
+
+/* Empty history */
+
+.empty-history {
+    display: none;
+    padding: 55px 20px;
+    text-align: center;
+}
+
+.empty-history-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #edf5f8;
+    border-radius: 50%;
+    font-size: 25px;
+}
+
+.empty-history h3 {
+    margin: 0 0 7px;
+    color: #34566a;
+    font-size: 16px;
+}
+
+.empty-history p {
+    max-width: 350px;
+    margin: auto;
+    color: #8799a3;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+
+    .history-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .history-search {
+        width: 100%;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .history-table {
+        min-width: 720px;
+    }
+
+    .history-table th,
+    .history-table td {
+        padding: 13px 14px;
+    }
+
+}

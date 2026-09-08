@@ -827,6 +827,10 @@ Do not explain your reasoning.
 // GENERATE PATIENT REPORT
 // =====================================================
 
+// =====================================================
+// GENERATE PATIENT REPORT
+// =====================================================
+
 app.post(
     "/api/patient/report",
     async (req, res) => {
@@ -858,6 +862,25 @@ app.post(
                         "No consultation conversation found."
 
                 });
+
+            }
+
+
+            // -----------------------------------------
+            // CHECK ACCESS CODE
+            // -----------------------------------------
+
+            if (!accessCode) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Access code is required."
+
+                });
+
             }
 
 
@@ -881,48 +904,152 @@ app.post(
 
 
             // -----------------------------------------
-            // REPORT INSTRUCTIONS
+            // REPORT SYSTEM INSTRUCTION
             // -----------------------------------------
 
             const systemInstruction = `
 
-You are Dr.Doctor's medical pre-consultation report generator.
+You are Dr.Doctor's medical pre-consultation
+report generator.
 
-Create a clear, structured summary of the patient's conversation
-for a licensed doctor who will see the patient next.
+Your job is to transform the patient's interview
+into a professional, structured pre-consultation
+history for a doctor.
+
+This report will be displayed inside a medical
+dashboard.
+
+IMPORTANT SAFETY RULES:
+
+- Do NOT diagnose.
+- Do NOT suggest a diagnosis.
+- Do NOT prescribe medicines.
+- Do NOT recommend medication.
+- Do NOT invent information.
+- Do NOT assume information that the patient
+  did not provide.
+- Do NOT turn symptoms into a disease name.
+- Clearly write "Not provided" when information
+  was not collected.
+- Use only information present in the conversation.
+- Preserve the patient's meaning.
+- Keep the report factual and professional.
+- If potentially serious warning symptoms are
+  mentioned, clearly flag them for doctor review.
+- Do not determine whether something is actually
+  dangerous or diagnose an emergency condition.
+- The doctor must make the final clinical judgment.
+
+LANGUAGE:
+
+Write the report in:
+
+${language || "English"}
 
 IMPORTANT:
 
-- Do NOT diagnose the patient.
-- Do NOT prescribe medicines.
-- Do NOT invent information.
-- Only include information actually provided by the patient.
-- Clearly mark information as "Not provided" when necessary.
-- Keep the report professional and easy for a doctor to scan.
-- The report is a PRE-CONSULTATION summary, not a diagnosis.
+Use clear section titles.
 
-Create these sections:
+Do NOT use Markdown symbols such as:
 
-1. Chief Complaint
-2. Duration / Onset
-3. Symptoms
-4. Severity
-5. Associated Symptoms
-6. Current Medications
-7. Allergies
-8. Previous Medical History
-9. Previous Treatments
-10. Relevant History
-11. Patient's Own Description
-12. Important Symptoms / Concerns for Doctor to Review
-13. Overall Pre-Consultation Summary
+**
+###
+*
+-
 
-If information is missing, write:
+Do NOT put stars around headings.
 
-"Not provided"
+Do NOT write an introduction explaining the report.
 
-The report should be written in:
-${language || "English"}
+Do NOT write a conclusion outside the requested
+sections.
+
+Return ONLY the structured report.
+
+Use exactly this structure:
+
+PATIENT CONCERN
+
+[Brief description of the patient's main concern.
+Use the patient's own description when possible.]
+
+DURATION / ONSET
+
+[When the problem started and how it began.
+Write "Not provided" if unavailable.]
+
+SYMPTOMS
+
+[List the symptoms actually reported by the patient.
+Use one symptom per line.]
+
+SEVERITY
+
+[Severity or intensity reported by the patient.
+Include rating such as 1-10 if provided.
+Write "Not provided" if unavailable.]
+
+LOCATION
+
+[Body location if relevant and provided.
+Write "Not provided" if unavailable.]
+
+ASSOCIATED SYMPTOMS
+
+[Other symptoms occurring along with the main concern.
+Write "None reported" only if the patient explicitly
+denied associated symptoms.
+Otherwise write "Not provided".]
+
+CURRENT MEDICATIONS
+
+[List medicines the patient explicitly said they
+are currently taking.
+Do not invent dosage.
+Write "None reported" if explicitly denied.
+Otherwise "Not provided".]
+
+ALLERGIES
+
+[List allergies explicitly mentioned.
+Write "No known allergies reported" only if explicitly
+stated by the patient.
+Otherwise "Not provided".]
+
+PREVIOUS MEDICAL HISTORY
+
+[List previous medical conditions explicitly mentioned.
+Do not infer conditions.]
+
+PREVIOUS TREATMENTS
+
+[List previous treatments or medical consultations
+explicitly mentioned.]
+
+RELEVANT HISTORY
+
+[Other information from the conversation that could
+be useful to the doctor.]
+
+PATIENT'S OWN DESCRIPTION
+
+[Short factual summary of how the patient describes
+their problem.]
+
+IMPORTANT INFORMATION FOR DOCTOR REVIEW
+
+[List statements or symptoms that deserve attention
+during consultation.
+
+Do not diagnose.
+
+If nothing specific was mentioned, write:
+"No specific concern identified from the information provided."]
+
+OVERALL PRE-CONSULTATION SUMMARY
+
+[Concise factual summary of the patient's reported
+history. Do not diagnose or recommend treatment.]
 
 `;
 
@@ -933,44 +1060,64 @@ ${language || "English"}
 
             const prompt = `
 
-PATIENT INFORMATION:
+PATIENT INFORMATION
 
-Patient ID: ${patientDetails?.patientId || "Not provided"}
-Name: ${patientDetails?.name || "Not provided"}
-Age: ${patientDetails?.age || "Not provided"}
-Gender: ${patientDetails?.gender || "Not provided"}
-Phone: ${patientDetails?.phone || "Not provided"}
-Blood Group: ${patientDetails?.bloodGroup || "Not provided"}
+Patient ID:
+${patientDetails?.patientId || "Not provided"}
 
-Consultation Date: ${
+Name:
+${patientDetails?.name || "Not provided"}
+
+Age:
+${patientDetails?.age || "Not provided"}
+
+Gender:
+${patientDetails?.gender || "Not provided"}
+
+Phone:
+${patientDetails?.phone || "Not provided"}
+
+Blood Group:
+${patientDetails?.bloodGroup || "Not provided"}
+
+Consultation Date:
+${
     patientDetails?.consultationDate
         ? new Date(
             patientDetails.consultationDate
-        ).toLocaleDateString()
+        ).toLocaleDateString("en-IN")
         : "Not provided"
 }
 
 
-COMPLETE PATIENT-AI CONVERSATION:
+PATIENT-AI INTERVIEW
 
 ${conversationText}
 
 
-Generate the structured pre-consultation report now.
+TASK
 
-Start the report with the patient's personal information.
+Create the professional pre-consultation report
+using ONLY the information above.
 
-Do not invent any information.
+Follow the exact section order provided
+in the system instructions.
 
-Do not explain how you generated the report.
+Keep every section concise.
 
-Return only the report.
+Do not diagnose.
+
+Do not prescribe.
+
+Do not invent.
+
+Return ONLY the report.
 
 `;
 
 
             // -----------------------------------------
-            // GROQ REPORT
+            // GROQ
             // -----------------------------------------
 
             const completion =
@@ -992,8 +1139,10 @@ Return only the report.
 
                     ],
 
-                    temperature: 0.2,
-                    max_tokens: 1500
+                    temperature: 0.1,
+
+                    max_tokens: 1800
+
                 });
 
 
@@ -1001,25 +1150,31 @@ Return only the report.
                 completion
                     .choices[0]
                     ?.message
-                    ?.content;
+                    ?.content
+                    ?.trim();
+
+
+            // -----------------------------------------
+            // MAKE SURE REPORT EXISTS
+            // -----------------------------------------
+
+            if (!report) {
+
+                return res.status(500).json({
+
+                    success: false,
+
+                    message:
+                        "AI could not generate the report."
+
+                });
+
+            }
 
 
             // -----------------------------------------
             // FIND DOCTOR USING ACCESS CODE
             // -----------------------------------------
-
-            if (!accessCode) {
-
-                return res.status(400).json({
-
-                    success: false,
-
-                    message:
-                        "Access code is required."
-
-                });
-            }
-
 
             const accessResult =
                 await db.execute({
@@ -1031,7 +1186,9 @@ Return only the report.
                         AND active = 1
                     `,
 
-                    args: [accessCode]
+                    args: [
+                        accessCode
+                    ]
 
                 });
 
@@ -1050,6 +1207,7 @@ Return only the report.
                         "Invalid or inactive access code."
 
                 });
+
             }
 
 
@@ -1080,7 +1238,9 @@ Return only the report.
 
                 args: [
 
-                    Number(accessData.doctor_id),
+                    Number(
+                        accessData.doctor_id
+                    ),
 
                     patientDetails?.patientId ||
                         "Not provided",
@@ -1107,8 +1267,7 @@ Return only the report.
                         conversation
                     ),
 
-                    report ||
-                        "Unable to generate the report."
+                    report
 
                 ]
 
@@ -1116,16 +1275,14 @@ Return only the report.
 
 
             // -----------------------------------------
-            // SEND REPORT
+            // SEND REPORT TO PATIENT
             // -----------------------------------------
 
             res.json({
 
                 success: true,
 
-                report:
-                    report ||
-                    "Unable to generate the report."
+                report
 
             });
 
@@ -1139,6 +1296,7 @@ Return only the report.
                 error
             );
 
+
             res.status(500).json({
 
                 success: false,
@@ -1147,7 +1305,9 @@ Return only the report.
                     "Could not generate patient report."
 
             });
+
         }
+
     }
 );
 

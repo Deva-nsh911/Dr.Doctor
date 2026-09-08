@@ -5,10 +5,17 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-    <title>Patient Report | Dr.Doctor</title>
+    <meta
+        name="theme-color"
+        content="#1479c9">
+
+    <title>
+        Patient Report | Dr.Doctor
+    </title>
 
 
     <style>
@@ -19,333 +26,1742 @@
             padding: 0;
         }
 
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f8fc;
-            color: #1e293b;
+
+        :root {
+
+            --primary: #1479c9;
+
+            --primary-dark: #0e65aa;
+
+            --primary-light: #eef7fd;
+
+            --background: #f4f8fc;
+
+            --card: #ffffff;
+
+            --border: #dfe9f1;
+
+            --text: #183247;
+
+            --muted: #718096;
+
+            --soft: #f8fbfe;
+
+            --success: #15803d;
+
+            --success-bg: #ecfdf5;
+
+            --warning: #9a6b00;
+
+            --warning-bg: #fff9e8;
+
+            --warning-border: #f1dfa7;
+
+            --danger: #b42318;
+
+            --danger-bg: #fff5f5;
+
+            --danger-border: #fecaca;
+
+            --shadow:
+                0 10px 30px rgba(
+                    15,
+                    61,
+                    92,
+                    0.06
+                );
+
         }
 
 
-        /* =========================
+        body {
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                var(--background);
+
+            color:
+                var(--text);
+
+            line-height:
+                1.6;
+
+        }
+
+
+        /* =========================================
            NAVBAR
-        ========================= */
+        ========================================= */
 
         .navbar {
-            height: 70px;
+
+            height: 72px;
 
             background: white;
 
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom:
+                1px solid var(--border);
 
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
 
-            padding: 0 40px;
+            padding:
+                0 42px;
 
             position: sticky;
+
             top: 0;
 
             z-index: 100;
-        }
 
-        .logo {
-            font-size: 25px;
-            font-weight: bold;
-            color: #1479c9;
-        }
-
-        .back-btn {
-            border: none;
-
-            background: #eef6fc;
-            color: #1479c9;
-
-            padding: 10px 16px;
-
-            border-radius: 8px;
-
-            cursor: pointer;
-
-            font-weight: 600;
-        }
-
-        .back-btn:hover {
-            background: #dceefb;
         }
 
 
-        /* =========================
-           MAIN
-        ========================= */
+        .brand {
 
-        .container {
-            max-width: 1100px;
-
-            margin: auto;
-
-            padding: 40px 25px;
-        }
-
-
-        .page-title {
-            margin-bottom: 25px;
-        }
-
-        .page-title h1 {
-            color: #12344d;
-
-            font-size: 30px;
-
-            margin-bottom: 8px;
-        }
-
-        .page-title p {
-            color: #64748b;
-        }
-
-
-        /* =========================
-           PATIENT CARD
-        ========================= */
-
-        .patient-card {
-            background: white;
-
-            border: 1px solid #e2eaf2;
-
-            border-radius: 18px;
-
-            padding: 25px;
-
-            margin-bottom: 25px;
-
-            box-shadow:
-                0 10px 30px rgba(15, 61, 92, 0.06);
-        }
-
-        .patient-card h2 {
-            color: #12344d;
-
-            margin-bottom: 20px;
-
-            font-size: 21px;
-        }
-
-
-        .patient-grid {
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            gap: 18px;
-        }
-
-
-        .info-item {
-            background: #f8fbfe;
-
-            border-radius: 12px;
-
-            padding: 15px;
-        }
-
-        .info-label {
-            font-size: 12px;
-
-            color: #64748b;
-
-            margin-bottom: 6px;
-        }
-
-        .info-value {
-            font-weight: 600;
-
-            color: #12344d;
-
-            word-break: break-word;
-        }
-
-
-        /* =========================
-           REPORT CARD
-        ========================= */
-
-        .report-card {
-            background: white;
-
-            border: 1px solid #e2eaf2;
-
-            border-radius: 18px;
-
-            padding: 30px;
-
-            box-shadow:
-                0 10px 30px rgba(15, 61, 92, 0.06);
-        }
-
-
-        .report-header {
             display: flex;
 
             align-items: center;
 
-            justify-content: space-between;
+            gap: 10px;
 
-            margin-bottom: 20px;
         }
 
 
-        .report-header h2 {
-            color: #12344d;
+        .brand-icon {
+
+            width: 38px;
+
+            height: 38px;
+
+            border-radius: 10px;
+
+            background:
+                var(--primary);
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 21px;
+
+            font-weight: 700;
+
+        }
+
+
+        .brand-name {
+
+            font-size: 23px;
+
+            font-weight: 700;
+
+            color:
+                var(--primary);
+
+        }
+
+
+        .nav-actions {
+
+            display: flex;
+
+            gap: 10px;
+
+        }
+
+
+        .nav-btn {
+
+            border: none;
+
+            cursor: pointer;
+
+            border-radius: 9px;
+
+            padding:
+                10px 16px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            transition:
+                0.2s ease;
+
+        }
+
+
+        .back-btn {
+
+            background:
+                var(--primary-light);
+
+            color:
+                var(--primary);
+
+        }
+
+
+        .back-btn:hover {
+
+            background:
+                #dceefb;
+
         }
 
 
         .print-btn {
-            border: none;
 
-            background: #1479c9;
+            background:
+                var(--primary);
 
             color: white;
 
-            padding: 10px 16px;
-
-            border-radius: 8px;
-
-            cursor: pointer;
-
-            font-weight: 600;
         }
+
 
         .print-btn:hover {
-            background: #0f67ad;
+
+            background:
+                var(--primary-dark);
+
         }
 
 
-        /* =========================
-           REPORT TEXT
-        ========================= */
+        /* =========================================
+           PAGE
+        ========================================= */
 
-        #reportText {
-            white-space: pre-wrap;
+        .page {
 
-            line-height: 1.8;
+            max-width: 1180px;
 
-            font-size: 15px;
+            margin: 0 auto;
 
-            color: #334155;
+            padding:
+                40px 24px 70px;
 
-            background: #f8fbfe;
-
-            border: 1px solid #e5edf4;
-
-            border-radius: 12px;
-
-            padding: 25px;
-
-            overflow-wrap: break-word;
         }
 
 
-        /* =========================
-           NOTICE
-        ========================= */
+        /* =========================================
+           REPORT TITLE
+        ========================================= */
 
-        .notice {
-            margin-top: 25px;
+        .report-header {
 
-            padding: 18px;
+            display: flex;
 
-            border-radius: 12px;
+            align-items: flex-start;
 
-            background: #fff8e7;
+            justify-content: space-between;
 
-            border: 1px solid #f5dfaa;
+            gap: 25px;
 
-            color: #735b18;
+            margin-bottom: 28px;
+
+        }
+
+
+        .report-heading {
+
+            max-width: 750px;
+
+        }
+
+
+        .report-label {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding:
+                6px 12px;
+
+            border-radius: 20px;
+
+            background:
+                var(--primary-light);
+
+            color:
+                var(--primary);
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            letter-spacing:
+                0.6px;
+
+            margin-bottom: 12px;
+
+        }
+
+
+        .report-heading h1 {
+
+            font-size: 32px;
+
+            color:
+                #12344d;
+
+            margin-bottom: 6px;
+
+        }
+
+
+        .report-heading p {
+
+            color:
+                var(--muted);
 
             font-size: 14px;
 
-            line-height: 1.6;
         }
 
 
-        /* =========================
-           LOADING
-        ========================= */
+        .report-meta {
 
-        .loading {
-            text-align: center;
+            background: white;
 
-            padding: 60px;
+            border:
+                1px solid var(--border);
 
-            color: #64748b;
+            border-radius: 12px;
+
+            padding:
+                12px 15px;
+
+            min-width: 170px;
+
+            box-shadow:
+                var(--shadow);
+
+        }
+
+
+        .meta-label {
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            letter-spacing:
+                0.5px;
+
+            color:
+                var(--muted);
+
+            font-weight: 700;
+
+        }
+
+
+        .meta-value {
+
+            margin-top: 3px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            color:
+                var(--text);
+
+        }
+
+
+        /* =========================================
+           PATIENT CARD
+        ========================================= */
+
+        .patient-card {
+
+            background:
+                var(--card);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 18px;
+
+            overflow: hidden;
+
+            box-shadow:
+                var(--shadow);
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .patient-top {
+
+            padding:
+                21px 24px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            border-bottom:
+                1px solid #e8eef4;
+
+        }
+
+
+        .patient-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+        }
+
+
+        .patient-avatar {
+
+            width: 48px;
+
+            height: 48px;
+
+            border-radius: 14px;
+
+            background:
+                var(--primary-light);
+
+            color:
+                var(--primary);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 22px;
+
+        }
+
+
+        .patient-title h2 {
+
+            font-size: 18px;
+
+            color:
+                #12344d;
+
+        }
+
+
+        .patient-title p {
+
+            color:
+                var(--muted);
+
+            font-size: 12px;
+
+            margin-top: 2px;
+
+        }
+
+
+        .completed-badge {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            padding:
+                7px 11px;
+
+            border-radius: 20px;
+
+            background:
+                var(--success-bg);
+
+            color:
+                var(--success);
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+        }
+
+
+        .completed-dot {
+
+            width: 7px;
+
+            height: 7px;
+
+            border-radius: 50%;
+
+            background:
+                #22c55e;
+
+        }
+
+
+        .patient-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+        }
+
+
+        .patient-info {
+
+            padding:
+                17px 20px;
+
+            border-right:
+                1px solid #e8eef4;
+
+            border-bottom:
+                1px solid #e8eef4;
+
+        }
+
+
+        .patient-info:nth-child(4n) {
+
+            border-right: none;
+
+        }
+
+
+        .patient-info:nth-last-child(-n+4) {
+
+            border-bottom: none;
+
+        }
+
+
+        .info-label {
+
+            color:
+                var(--muted);
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            letter-spacing:
+                0.55px;
+
+            font-weight: 700;
+
+            margin-bottom: 4px;
+
+        }
+
+
+        .info-value {
+
+            color:
+                #12344d;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            overflow-wrap: anywhere;
+
+        }
+
+
+        /* =========================================
+           SECTION
+        ========================================= */
+
+        .section {
+
+            margin-bottom: 22px;
+
+        }
+
+
+        .section-header {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 11px;
+
+        }
+
+
+        .section-icon {
+
+            width: 36px;
+
+            height: 36px;
+
+            border-radius: 10px;
+
+            background:
+                var(--primary-light);
+
+            color:
+                var(--primary);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 17px;
+
+        }
+
+
+        .section-header h2 {
+
+            font-size: 17px;
+
+            color:
+                #12344d;
+
+        }
+
+
+        .section-header p {
+
+            color:
+                var(--muted);
+
+            font-size: 11px;
+
+        }
+
+
+        /* =========================================
+           REPORT GRID
+        ========================================= */
+
+        .report-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 16px;
+
+        }
+
+
+        .report-box {
+
+            background:
+                white;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 15px;
+
+            padding:
+                20px;
+
+            box-shadow:
+                var(--shadow);
+
+        }
+
+
+        .report-box.full {
+
+            grid-column:
+                1 / -1;
+
+        }
+
+
+        .report-box-header {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 10px;
+
+            margin-bottom: 12px;
+
+            padding-bottom:
+                11px;
+
+            border-bottom:
+                1px solid #edf2f6;
+
+        }
+
+
+        .report-box-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+        }
+
+
+        .mini-icon {
+
+            width: 30px;
+
+            height: 30px;
+
+            border-radius: 8px;
+
+            background:
+                var(--primary-light);
+
+            color:
+                var(--primary);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 14px;
+
+        }
+
+
+        .report-box-title h3 {
+
+            font-size: 14px;
+
+            color:
+                #183247;
+
+        }
+
+
+        .report-content {
+
+            color:
+                #475569;
+
+            font-size: 14px;
+
+            line-height:
+                1.75;
+
+        }
+
+
+        .report-content p {
+
+            margin-bottom: 7px;
+
+        }
+
+
+        .report-content p:last-child {
+
+            margin-bottom: 0;
+
+        }
+
+
+        .report-content ul {
+
+            padding-left:
+                20px;
+
+            margin: 0;
+
+        }
+
+
+        .report-content li {
+
+            margin-bottom: 6px;
+
+        }
+
+
+        .report-content li:last-child {
+
+            margin-bottom: 0;
+
+        }
+
+
+        .not-provided {
+
+            color:
+                #94a3b8;
+
+            font-style: italic;
+
+        }
+
+
+        /* =========================================
+           IMPORTANT REVIEW BOX
+        ========================================= */
+
+        .review-box {
+
+            background:
+                var(--warning-bg);
+
+            border:
+                1px solid var(--warning-border);
+
+            border-radius: 16px;
+
+            padding:
+                21px;
+
+            margin-top: 5px;
+
+        }
+
+
+        .review-header {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .review-icon {
+
+            width: 36px;
+
+            height: 36px;
+
+            border-radius: 10px;
+
+            background:
+                #fff0c7;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 17px;
+
+        }
+
+
+        .review-header h2 {
+
+            color:
+                #735b18;
 
             font-size: 16px;
+
         }
 
 
-        /* =========================
+        .review-header p {
+
+            color:
+                #9a7b25;
+
+            font-size: 11px;
+
+        }
+
+
+        .review-content {
+
+            color:
+                #806b31;
+
+            font-size: 13px;
+
+            line-height:
+                1.7;
+
+        }
+
+
+        .review-content ul {
+
+            padding-left:
+                20px;
+
+        }
+
+
+        .review-content li {
+
+            margin-bottom: 6px;
+
+        }
+
+
+        /* =========================================
+           AI SUMMARY
+        ========================================= */
+
+        .summary-box {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f5faff,
+                    #ffffff
+                );
+
+            border:
+                1px solid #cfe5f8;
+
+            border-radius: 16px;
+
+            padding:
+                22px;
+
+            margin-top: 16px;
+
+        }
+
+
+        .summary-header {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .summary-icon {
+
+            width: 36px;
+
+            height: 36px;
+
+            border-radius: 10px;
+
+            background:
+                #e7f3fc;
+
+            color:
+                var(--primary);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 17px;
+
+        }
+
+
+        .summary-header h2 {
+
+            color:
+                #145b8d;
+
+            font-size: 16px;
+
+        }
+
+
+        .summary-header p {
+
+            color:
+                #5f8198;
+
+            font-size: 11px;
+
+        }
+
+
+        .summary-content {
+
+            color:
+                #45647a;
+
+            font-size: 14px;
+
+            line-height:
+                1.75;
+
+        }
+
+
+        /* =========================================
+           SAFETY NOTICE
+        ========================================= */
+
+        .medical-notice {
+
+            margin-top: 20px;
+
+            padding:
+                18px 20px;
+
+            border-radius: 14px;
+
+            background:
+                #f0f7ff;
+
+            border:
+                1px solid #cfe5f8;
+
+        }
+
+
+        .medical-notice-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            color:
+                #145b8d;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .medical-notice p {
+
+            color:
+                #4b6b83;
+
+            font-size: 12px;
+
+            line-height:
+                1.65;
+
+        }
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        .footer {
+
+            margin-top: 25px;
+
+            padding-top: 18px;
+
+            border-top:
+                1px solid #dfe8ef;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            color:
+                #94a3b8;
+
+            font-size: 11px;
+
+        }
+
+
+        .footer-brand {
+
+            color:
+                var(--primary);
+
+            font-weight: 700;
+
+        }
+
+
+        /* =========================================
+           LOADING
+        ========================================= */
+
+        .loading {
+
+            min-height: 300px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color:
+                var(--muted);
+
+            font-size: 14px;
+
+        }
+
+
+        .loader {
+
+            width: 25px;
+
+            height: 25px;
+
+            border:
+                3px solid #dcecf8;
+
+            border-top-color:
+                var(--primary);
+
+            border-radius: 50%;
+
+            animation:
+                spin 0.8s linear infinite;
+
+            margin-right: 10px;
+
+        }
+
+
+        @keyframes spin {
+
+            to {
+
+                transform:
+                    rotate(360deg);
+
+            }
+
+        }
+
+
+        /* =========================================
+           ERROR
+        ========================================= */
+
+        .error-card {
+
+            background:
+                var(--danger-bg);
+
+            border:
+                1px solid var(--danger-border);
+
+            border-radius: 15px;
+
+            padding:
+                25px;
+
+            text-align: center;
+
+            color:
+                var(--danger);
+
+        }
+
+
+        /* =========================================
            MOBILE
-        ========================= */
+        ========================================= */
 
-        @media (max-width: 750px) {
-
-            .navbar {
-                padding: 0 18px;
-            }
-
-            .container {
-                padding: 30px 15px;
-            }
+        @media (max-width: 850px) {
 
             .patient-grid {
-                grid-template-columns: 1fr;
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+
             }
+
+
+            .patient-info:nth-child(4n) {
+
+                border-right:
+                    1px solid #e8eef4;
+
+            }
+
+
+            .patient-info:nth-child(2n) {
+
+                border-right:
+                    none;
+
+            }
+
+
+            .patient-info:nth-last-child(-n+4) {
+
+                border-bottom:
+                    1px solid #e8eef4;
+
+            }
+
+
+            .patient-info:nth-last-child(-n+2) {
+
+                border-bottom:
+                    none;
+
+            }
+
+
+            .report-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .report-box.full {
+
+                grid-column:
+                    auto;
+
+            }
+
 
             .report-header {
+
                 flex-direction: column;
 
-                align-items: stretch;
-
-                gap: 15px;
             }
 
-            .print-btn {
+
+            .report-meta {
+
                 width: 100%;
+
             }
 
         }
 
 
-        /* =========================
+        @media (max-width: 600px) {
+
+            .navbar {
+
+                height: 64px;
+
+                padding:
+                    0 15px;
+
+            }
+
+
+            .brand-icon {
+
+                width: 34px;
+
+                height: 34px;
+
+                font-size: 18px;
+
+            }
+
+
+            .brand-name {
+
+                font-size: 20px;
+
+            }
+
+
+            .back-btn {
+
+                font-size: 0;
+
+                padding:
+                    9px 12px;
+
+            }
+
+
+            .back-btn::after {
+
+                content: "←";
+
+                font-size: 20px;
+
+            }
+
+
+            .page {
+
+                padding:
+                    27px 14px 45px;
+
+            }
+
+
+            .report-heading h1 {
+
+                font-size: 26px;
+
+            }
+
+
+            .report-heading p {
+
+                font-size: 13px;
+
+            }
+
+
+            .patient-top {
+
+                padding:
+                    17px;
+
+            }
+
+
+            .patient-title h2 {
+
+                font-size: 16px;
+
+            }
+
+
+            .completed-badge {
+
+                display: none;
+
+            }
+
+
+            .patient-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .patient-info {
+
+                border-right:
+                    none !important;
+
+                border-bottom:
+                    1px solid #e8eef4 !important;
+
+            }
+
+
+            .patient-info:last-child {
+
+                border-bottom:
+                    none !important;
+
+            }
+
+
+            .report-box {
+
+                padding:
+                    17px;
+
+            }
+
+
+            .footer {
+
+                flex-direction: column;
+
+                gap: 5px;
+
+            }
+
+        }
+
+
+        /* =========================================
            PRINT
-        ========================= */
+        ========================================= */
 
         @media print {
 
-            .navbar,
-            .back-btn,
-            .print-btn {
-                display: none;
+            @page {
+
+                size: A4;
+
+                margin: 12mm;
+
             }
+
 
             body {
-                background: white;
+
+                background:
+                    white;
+
+                color:
+                    #111827;
+
             }
 
-            .container {
-                max-width: none;
 
-                padding: 0;
+            .navbar {
+
+                display: none;
+
             }
+
+
+            .page {
+
+                max-width:
+                    none;
+
+                padding:
+                    0;
+
+                margin:
+                    0;
+
+            }
+
+
+            .report-header {
+
+                margin-bottom:
+                    14px;
+
+            }
+
+
+            .report-heading h1 {
+
+                font-size:
+                    24px;
+
+            }
+
+
+            .report-heading p {
+
+                font-size:
+                    11px;
+
+            }
+
+
+            .report-label {
+
+                padding:
+                    4px 8px;
+
+                margin-bottom:
+                    6px;
+
+            }
+
 
             .patient-card,
-            .report-card {
-                box-shadow: none;
+            .report-box,
+            .review-box,
+            .summary-box,
+            .medical-notice {
 
-                border: 1px solid #ddd;
+                box-shadow:
+                    none;
+
+            }
+
+
+            .patient-card {
+
+                border-radius:
+                    7px;
+
+                margin-bottom:
+                    13px;
+
+            }
+
+
+            .patient-top {
+
+                padding:
+                    11px 14px;
+
+            }
+
+
+            .patient-avatar {
+
+                width:
+                    35px;
+
+                height:
+                    35px;
+
+                border-radius:
+                    8px;
+
+                font-size:
+                    17px;
+
+            }
+
+
+            .patient-grid {
+
+                grid-template-columns:
+                    repeat(4, 1fr);
+
+            }
+
+
+            .patient-info {
+
+                padding:
+                    8px 10px;
+
+            }
+
+
+            .info-label {
+
+                font-size:
+                    8px;
+
+            }
+
+
+            .info-value {
+
+                font-size:
+                    10px;
+
+            }
+
+
+            .report-grid {
+
+                gap:
+                    9px;
+
+            }
+
+
+            .report-box {
+
+                padding:
+                    12px;
+
+                border-radius:
+                    7px;
+
+            }
+
+
+            .report-box-header {
+
+                padding-bottom:
+                    7px;
+
+                margin-bottom:
+                    7px;
+
+            }
+
+
+            .mini-icon {
+
+                width:
+                    23px;
+
+                height:
+                    23px;
+
+                font-size:
+                    11px;
+
+            }
+
+
+            .report-box-title h3 {
+
+                font-size:
+                    10px;
+
+            }
+
+
+            .report-content {
+
+                font-size:
+                    9px;
+
+                line-height:
+                    1.5;
+
+            }
+
+
+            .review-box,
+            .summary-box,
+            .medical-notice {
+
+                padding:
+                    11px;
+
+                margin-top:
+                    9px;
+
+                border-radius:
+                    7px;
+
+            }
+
+
+            .review-header,
+            .summary-header {
+
+                margin-bottom:
+                    5px;
+
+            }
+
+
+            .review-header h2,
+            .summary-header h2 {
+
+                font-size:
+                    11px;
+
+            }
+
+
+            .review-content,
+            .summary-content {
+
+                font-size:
+                    9px;
+
+                line-height:
+                    1.5;
+
+            }
+
+
+            .medical-notice-title {
+
+                font-size:
+                    10px;
+
+            }
+
+
+            .medical-notice p {
+
+                font-size:
+                    8px;
+
+            }
+
+
+            .footer {
+
+                margin-top:
+                    10px;
+
+                padding-top:
+                    8px;
+
+                font-size:
+                    8px;
+
+            }
+
+
+            .section {
+
+                margin-bottom:
+                    10px;
+
+            }
+
+
+            .section-header {
+
+                margin-bottom:
+                    6px;
+
+            }
+
+
+            .section-icon {
+
+                width:
+                    25px;
+
+                height:
+                    25px;
+
+                font-size:
+                    12px;
+
+            }
+
+
+            .section-header h2 {
+
+                font-size:
+                    11px;
+
             }
 
         }
@@ -358,59 +1774,137 @@
 <body>
 
 
-    <!-- NAVBAR -->
+    <!-- =========================================
+         NAVBAR
+    ========================================== -->
 
     <nav class="navbar">
 
-        <div class="logo">
-            Dr.Doctor
+        <div class="brand">
+
+            <div class="brand-icon">
+                +
+            </div>
+
+            <div class="brand-name">
+                Dr.Doctor
+            </div>
+
         </div>
 
-        <button
-            class="back-btn"
-            onclick="goBack()">
 
-            ← Back to Dashboard
+        <div class="nav-actions">
 
-        </button>
+            <button
+                class="nav-btn back-btn"
+                onclick="goBack()">
+
+                ← Back to Dashboard
+
+            </button>
+
+        </div>
 
     </nav>
 
 
 
-    <!-- MAIN -->
+    <!-- =========================================
+         PAGE
+    ========================================== -->
 
-    <main class="container">
-
-
-        <div class="page-title">
-
-            <h1>
-                Patient Report
-            </h1>
-
-            <p>
-                Pre-consultation history prepared for
-                doctor review.
-            </p>
-
-        </div>
+    <main class="page">
 
 
+        <!-- =====================================
+             HEADER
+        ====================================== -->
 
-        <!-- PATIENT INFORMATION -->
+        <header class="report-header">
+
+            <div class="report-heading">
+
+                <div class="report-label">
+
+                    🩺 PRE-CONSULTATION
+
+                </div>
+
+
+                <h1>
+                    Patient Report
+                </h1>
+
+
+                <p>
+                    AI-assisted patient history prepared
+                    for professional doctor review.
+                </p>
+
+            </div>
+
+
+            <div class="report-meta">
+
+                <div class="meta-label">
+                    Report Status
+                </div>
+
+                <div class="meta-value">
+                    ✓ Ready for Review
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =====================================
+             PATIENT INFORMATION
+        ====================================== -->
 
         <section class="patient-card">
 
-            <h2>
-                Patient Information
-            </h2>
+            <div class="patient-top">
+
+                <div class="patient-title">
+
+                    <div class="patient-avatar">
+                        👤
+                    </div>
+
+
+                    <div>
+
+                        <h2 id="patientDisplayName">
+                            Patient
+                        </h2>
+
+                        <p>
+                            Patient information and consultation details
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="completed-badge">
+
+                    <span class="completed-dot"></span>
+
+                    Consultation Completed
+
+                </div>
+
+            </div>
 
 
             <div class="patient-grid">
 
 
-                <div class="info-item">
+                <div class="patient-info">
 
                     <div class="info-label">
                         Patient Name
@@ -427,7 +1921,7 @@
                 </div>
 
 
-                <div class="info-item">
+                <div class="patient-info">
 
                     <div class="info-label">
                         Patient ID
@@ -444,7 +1938,7 @@
                 </div>
 
 
-                <div class="info-item">
+                <div class="patient-info">
 
                     <div class="info-label">
                         Age
@@ -461,7 +1955,7 @@
                 </div>
 
 
-                <div class="info-item">
+                <div class="patient-info">
 
                     <div class="info-label">
                         Gender
@@ -478,7 +1972,7 @@
                 </div>
 
 
-                <div class="info-item">
+                <div class="patient-info">
 
                     <div class="info-label">
                         Phone
@@ -495,7 +1989,7 @@
                 </div>
 
 
-                <div class="info-item">
+                <div class="patient-info">
 
                     <div class="info-label">
                         Blood Group
@@ -512,7 +2006,7 @@
                 </div>
 
 
-                <div class="info-item">
+                <div class="patient-info">
 
                     <div class="info-label">
                         Language
@@ -529,7 +2023,7 @@
                 </div>
 
 
-                <div class="info-item">
+                <div class="patient-info">
 
                     <div class="info-label">
                         Consultation Date
@@ -545,241 +2039,1064 @@
 
                 </div>
 
-
             </div>
 
         </section>
 
 
 
-        <!-- REPORT -->
+        <!-- =====================================
+             REPORT
+        ====================================== -->
 
-        <section class="report-card">
+        <section class="section">
 
+            <div class="section-header">
 
-            <div class="report-header">
+                <div class="section-icon">
+                    📋
+                </div>
 
-                <h2>
-                    AI Pre-Consultation Report
-                </h2>
+                <div>
 
-                <button
-                    class="print-btn"
-                    onclick="window.print()">
+                    <h2>
+                        Clinical History
+                    </h2>
 
-                    🖨 Print Report
+                    <p>
+                        Information collected during the pre-consultation
+                    </p>
 
-                </button>
+                </div>
 
             </div>
 
 
             <div
-                id="reportText"
-                class="loading">
+                id="reportGrid"
+                class="report-grid">
 
-                Loading report...
+                <div class="report-box full loading">
 
-            </div>
+                    <span class="loader"></span>
 
+                    Loading patient report...
 
-            <div class="notice">
-
-                <strong>Medical Notice:</strong>
-
-                This report is an AI-generated
-                pre-consultation history summary.
-                It is intended to assist the doctor
-                during consultation and is not a
-                diagnosis or prescription.
+                </div>
 
             </div>
-
 
         </section>
+
+
+
+        <!-- =====================================
+             IMPORTANT INFORMATION
+        ====================================== -->
+
+        <div
+            id="reviewBox"
+            class="review-box"
+            style="display:none;">
+
+            <div class="review-header">
+
+                <div class="review-icon">
+                    ⚠️
+                </div>
+
+                <div>
+
+                    <h2>
+                        Important Information for Doctor Review
+                    </h2>
+
+                    <p>
+                        Please review these points during consultation
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="reviewContent"
+                class="review-content">
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================
+             OVERALL SUMMARY
+        ====================================== -->
+
+        <div
+            id="summaryBox"
+            class="summary-box"
+            style="display:none;">
+
+            <div class="summary-header">
+
+                <div class="summary-icon">
+                    🤖
+                </div>
+
+                <div>
+
+                    <h2>
+                        Overall Pre-Consultation Summary
+                    </h2>
+
+                    <p>
+                        AI-generated factual summary
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="summaryContent"
+                class="summary-content">
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================
+             MEDICAL SAFETY
+        ====================================== -->
+
+        <div class="medical-notice">
+
+            <div class="medical-notice-title">
+
+                <span>⚕</span>
+
+                Medical Safety Notice
+
+            </div>
+
+
+            <p>
+
+                This is an AI-generated
+                pre-consultation history summary.
+                It is intended only to assist the
+                doctor during consultation.
+                It does not provide a diagnosis,
+                prescribe medication, or replace
+                professional medical judgment.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- =====================================
+             FOOTER
+        ====================================== -->
+
+        <footer class="footer">
+
+            <div>
+
+                Generated for
+                <span class="footer-brand">
+                    Dr.Doctor
+                </span>
+
+            </div>
+
+
+            <div>
+                AI-assisted pre-consultation history
+            </div>
+
+        </footer>
 
 
     </main>
 
 
 
-<script>
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <script>
 
 
-    /*
-       GET SELECTED CONSULTATION
-    */
+        /* ========================================
+           GET CONSULTATION ID
+        ======================================== */
 
-    const consultationId =
-        sessionStorage.getItem(
-            "selectedConsultationId"
-        );
-
-
-    /*
-       IF NO CONSULTATION ID
-    */
-
-    if (!consultationId) {
-
-        document.getElementById(
-            "reportText"
-        ).textContent =
-            "No consultation was selected.";
-
-    } else {
-
-        loadReport();
-
-    }
+        const consultationId =
+            sessionStorage.getItem(
+                "selectedConsultationId"
+            );
 
 
+        /* ========================================
+           START
+        ======================================== */
 
-    /*
-       LOAD REPORT
-    */
+        if (!consultationId) {
 
-    async function loadReport() {
+            showError(
+                "No consultation was selected. Please return to the dashboard and select a patient report."
+            );
 
-        try {
+        } else {
 
-            const response =
-                await fetch(
-                    "/api/doctor/consultation/"
-                    + consultationId
+            loadReport();
+
+        }
+
+
+
+        /* ========================================
+           LOAD REPORT
+        ======================================== */
+
+        async function loadReport() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/doctor/consultation/"
+                        + encodeURIComponent(
+                            consultationId
+                        )
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "HTTP "
+                        + response.status
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                if (!data.success) {
+
+                    throw new Error(
+                        data.message
+                        || "Unable to load consultation."
+                    );
+
+                }
+
+
+                const consultation =
+                    data.consultation;
+
+
+                if (!consultation) {
+
+                    throw new Error(
+                        "Consultation data was not found."
+                    );
+
+                }
+
+
+                /* =================================
+                   PATIENT INFORMATION
+                ================================= */
+
+                setText(
+                    "patientName",
+                    consultation.patient_name
+                    || "Not provided"
                 );
 
 
-            const data =
-                await response.json();
+                setText(
+                    "patientDisplayName",
+                    consultation.patient_name
+                    || "Patient"
+                );
 
 
-            if (!data.success) {
+                setText(
+                    "patientId",
+                    consultation.patient_id
+                    || "Not provided"
+                );
 
+
+                setText(
+                    "patientAge",
+                    consultation.patient_age
+                    || "Not provided"
+                );
+
+
+                setText(
+                    "patientGender",
+                    consultation.patient_gender
+                    || "Not provided"
+                );
+
+
+                setText(
+                    "patientPhone",
+                    consultation.patient_phone
+                    || "Not provided"
+                );
+
+
+                setText(
+                    "bloodGroup",
+                    consultation.patient_blood_group
+                    || "Not provided"
+                );
+
+
+                setText(
+                    "language",
+                    consultation.language
+                    || "English"
+                );
+
+
+                setText(
+                    "consultationDate",
+                    formatDate(
+                        consultation.created_at
+                    )
+                );
+
+
+                /* =================================
+                   REPORT
+                ================================= */
+
+                renderReport(
+                    consultation.report
+                    || ""
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Report loading error:",
+                    error
+                );
+
+
+                showError(
+                    error.message
+                    || "Unable to load the report."
+                );
+
+            }
+
+        }
+
+
+
+        /* ========================================
+           RENDER STRUCTURED REPORT
+        ======================================== */
+
+        function renderReport(text) {
+
+            const reportGrid =
                 document.getElementById(
-                    "reportText"
-                ).textContent =
-                    data.message ||
-                    "Unable to load report.";
+                    "reportGrid"
+                );
+
+
+            if (!text.trim()) {
+
+                reportGrid.innerHTML = `
+                    <div class="error-card full">
+                        No report is available for this consultation.
+                    </div>
+                `;
 
                 return;
 
             }
 
 
-            const consultation =
-                data.consultation;
+            const sections =
+                parseReportSections(text);
 
 
-            /*
-               PATIENT INFORMATION
-            */
-
-            document.getElementById(
-                "patientName"
-            ).textContent =
-                consultation.patient_name
-                || "Not provided";
+            reportGrid.innerHTML = "";
 
 
-            document.getElementById(
-                "patientId"
-            ).textContent =
-                consultation.patient_id
-                || "Not provided";
+            const sectionDefinitions = [
+
+                {
+                    key: "PATIENT CONCERN",
+                    title: "Patient Concern",
+                    icon: "🩺"
+                },
+
+                {
+                    key: "DURATION / ONSET",
+                    title: "Duration / Onset",
+                    icon: "🕐"
+                },
+
+                {
+                    key: "SYMPTOMS",
+                    title: "Symptoms",
+                    icon: "🤒"
+                },
+
+                {
+                    key: "SEVERITY",
+                    title: "Severity",
+                    icon: "📊"
+                },
+
+                {
+                    key: "LOCATION",
+                    title: "Location",
+                    icon: "📍"
+                },
+
+                {
+                    key: "ASSOCIATED SYMPTOMS",
+                    title: "Associated Symptoms",
+                    icon: "➕"
+                },
+
+                {
+                    key: "CURRENT MEDICATIONS",
+                    title: "Current Medications",
+                    icon: "💊"
+                },
+
+                {
+                    key: "ALLERGIES",
+                    title: "Allergies",
+                    icon: "⚠️"
+                },
+
+                {
+                    key: "PREVIOUS MEDICAL HISTORY",
+                    title: "Previous Medical History",
+                    icon: "📚"
+                },
+
+                {
+                    key: "PREVIOUS TREATMENTS",
+                    title: "Previous Treatments",
+                    icon: "🏥"
+                },
+
+                {
+                    key: "RELEVANT HISTORY",
+                    title: "Relevant History",
+                    icon: "📝"
+                },
+
+                {
+                    key: "PATIENT'S OWN DESCRIPTION",
+                    title: "Patient's Own Description",
+                    icon: "💬",
+                    full: true
+                }
+
+            ];
 
 
-            document.getElementById(
-                "patientAge"
-            ).textContent =
-                consultation.patient_age
-                || "Not provided";
+            sectionDefinitions.forEach(
+                definition => {
+
+                    const content =
+                        sections[
+                            definition.key
+                        ];
 
 
-            document.getElementById(
-                "patientGender"
-            ).textContent =
-                consultation.patient_gender
-                || "Not provided";
+                    if (
+                        content === undefined
+                    ) {
+
+                        return;
+
+                    }
 
 
-            document.getElementById(
-                "patientPhone"
-            ).textContent =
-                consultation.patient_phone
-                || "Not provided";
+                    reportGrid.innerHTML +=
+                        createReportBox(
+                            definition,
+                            content
+                        );
+
+                }
+            );
 
 
-            document.getElementById(
-                "bloodGroup"
-            ).textContent =
-                consultation.patient_blood_group
-                || "Not provided";
+            /* =================================
+               IMPORTANT REVIEW
+            ================================= */
+
+            const review =
+                sections[
+                    "IMPORTANT INFORMATION FOR DOCTOR REVIEW"
+                ];
 
 
-            document.getElementById(
-                "language"
-            ).textContent =
-                consultation.language
-                || "English";
+            if (review) {
 
-
-            document.getElementById(
-                "consultationDate"
-            ).textContent =
-                formatDate(
-                    consultation.created_at
-                );
-
-
-            /*
-               REPORT
-            */
-
-            const reportText =
                 document.getElementById(
-                    "reportText"
+                    "reviewBox"
+                ).style.display =
+                    "block";
+
+
+                document.getElementById(
+                    "reviewContent"
+                ).innerHTML =
+                    formatContent(
+                        review,
+                        true
+                    );
+
+            }
+
+
+            /* =================================
+               OVERALL SUMMARY
+            ================================= */
+
+            const summary =
+                sections[
+                    "OVERALL PRE-CONSULTATION SUMMARY"
+                ];
+
+
+            if (summary) {
+
+                document.getElementById(
+                    "summaryBox"
+                ).style.display =
+                    "block";
+
+
+                document.getElementById(
+                    "summaryContent"
+                ).innerHTML =
+                    formatContent(
+                        summary,
+                        false
+                    );
+
+            }
+
+
+            /* =================================
+               FALLBACK
+            ================================= */
+
+            if (
+                reportGrid.children.length === 0
+            ) {
+
+                reportGrid.innerHTML = `
+
+                    <div class="report-box full">
+
+                        <div class="report-box-header">
+
+                            <div class="report-box-title">
+
+                                <div class="mini-icon">
+                                    📋
+                                </div>
+
+                                <h3>
+                                    Pre-Consultation Report
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+                        <div class="report-content">
+
+                            ${formatContent(
+                                text,
+                                false
+                            )}
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+
+        /* ========================================
+           PARSE REPORT SECTIONS
+        ======================================== */
+
+        function parseReportSections(text) {
+
+            const headings = [
+
+                "PATIENT CONCERN",
+
+                "DURATION / ONSET",
+
+                "SYMPTOMS",
+
+                "SEVERITY",
+
+                "LOCATION",
+
+                "ASSOCIATED SYMPTOMS",
+
+                "CURRENT MEDICATIONS",
+
+                "ALLERGIES",
+
+                "PREVIOUS MEDICAL HISTORY",
+
+                "PREVIOUS TREATMENTS",
+
+                "RELEVANT HISTORY",
+
+                "PATIENT'S OWN DESCRIPTION",
+
+                "IMPORTANT INFORMATION FOR DOCTOR REVIEW",
+
+                "OVERALL PRE-CONSULTATION SUMMARY"
+
+            ];
+
+
+            const normalized =
+                text
+                    .replace(/\r\n/g, "\n")
+                    .replace(/\r/g, "\n");
+
+
+            const sections = {};
+
+
+            let currentHeading = null;
+
+
+            const lines =
+                normalized.split("\n");
+
+
+            for (
+                let i = 0;
+                i < lines.length;
+                i++
+            ) {
+
+                const line =
+                    lines[i].trim();
+
+
+                if (!line) {
+
+                    continue;
+
+                }
+
+
+                const matchedHeading =
+                    headings.find(
+                        heading =>
+                            line.toUpperCase()
+                            === heading
+                    );
+
+
+                if (matchedHeading) {
+
+                    currentHeading =
+                        matchedHeading;
+
+                    sections[
+                        currentHeading
+                    ] = "";
+
+                    continue;
+
+                }
+
+
+                if (currentHeading) {
+
+                    sections[
+                        currentHeading
+                    ] +=
+                        line
+                        + "\n";
+
+                }
+
+            }
+
+
+            Object.keys(sections)
+                .forEach(key => {
+
+                    sections[key] =
+                        sections[key]
+                            .trim();
+
+                });
+
+
+            return sections;
+
+        }
+
+
+
+        /* ========================================
+           CREATE REPORT BOX
+        ======================================== */
+
+        function createReportBox(
+            definition,
+            content
+        ) {
+
+            const fullClass =
+                definition.full
+                    ? " full"
+                    : "";
+
+
+            return `
+
+                <article
+                    class="report-box${fullClass}">
+
+                    <div class="report-box-header">
+
+                        <div class="report-box-title">
+
+                            <div class="mini-icon">
+
+                                ${definition.icon}
+
+                            </div>
+
+                            <h3>
+
+                                ${escapeHTML(
+                                    definition.title
+                                )}
+
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="report-content">
+
+                        ${formatContent(
+                            content,
+                            false
+                        )}
+
+                    </div>
+
+                </article>
+
+            `;
+
+        }
+
+
+
+        /* ========================================
+           FORMAT CONTENT
+        ======================================== */
+
+        function formatContent(
+            text,
+            forceList
+        ) {
+
+            if (!text) {
+
+                return `
+                    <span class="not-provided">
+                        Not provided
+                    </span>
+                `;
+
+            }
+
+
+            const lines =
+                text
+                    .split("\n")
+                    .map(
+                        line => line.trim()
+                    )
+                    .filter(
+                        line => line.length > 0
+                    );
+
+
+            if (lines.length === 0) {
+
+                return `
+                    <span class="not-provided">
+                        Not provided
+                    </span>
+                `;
+
+            }
+
+
+            /* =================================
+               DETECT MULTIPLE LINES
+            ================================= */
+
+            const shouldUseList =
+                forceList
+                || lines.length > 1;
+
+
+            if (shouldUseList) {
+
+                let listItems = "";
+
+
+                lines.forEach(line => {
+
+                    line =
+                        line.replace(
+                            /^[-*•]\s+/,
+                            ""
+                        );
+
+
+                    line =
+                        line.replace(
+                            /^\d+\.\s+/,
+                            ""
+                        );
+
+
+                    listItems += `
+
+                        <li>
+                            ${formatInlineText(
+                                line
+                            )}
+                        </li>
+
+                    `;
+
+                });
+
+
+                return `
+                    <ul>
+                        ${listItems}
+                    </ul>
+                `;
+
+            }
+
+
+            return `
+
+                <p>
+                    ${formatInlineText(
+                        lines[0]
+                    )}
+                </p>
+
+            `;
+
+        }
+
+
+
+        /* ========================================
+           INLINE FORMATTING
+        ======================================== */
+
+        function formatInlineText(text) {
+
+            let safe =
+                escapeHTML(text);
+
+
+            /*
+             * Bold
+             */
+
+            safe =
+                safe.replace(
+                    /\*\*(.*?)\*\*/g,
+                    "<strong>$1</strong>"
                 );
 
-            reportText.classList.remove(
-                "loading"
-            );
 
-            reportText.textContent =
-                consultation.report
-                || "No report available.";
+            /*
+             * Italic
+             */
+
+            safe =
+                safe.replace(
+                    /(?<!\*)\*([^*]+)\*(?!\*)/g,
+                    "<em>$1</em>"
+                );
 
 
-        } catch (error) {
+            /*
+             * Inline code
+             */
 
-            console.error(
-                "Report loading error:",
-                error
-            );
+            safe =
+                safe.replace(
+                    /`([^`]+)`/g,
+                    "<code>$1</code>"
+                );
 
-            document.getElementById(
-                "reportText"
-            ).textContent =
-                "Unable to load the report.";
+
+            if (
+                /^not provided$/i.test(
+                    text.trim()
+                )
+            ) {
+
+                return `
+                    <span class="not-provided">
+                        Not provided
+                    </span>
+                `;
+
+            }
+
+
+            return safe;
 
         }
 
-    }
 
 
+        /* ========================================
+           ESCAPE HTML
+        ======================================== */
 
-    /*
-       FORMAT DATE
-    */
+        function escapeHTML(text) {
 
-    function formatDate(date) {
+            return String(text)
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
 
-        if (!date) {
-            return "Not provided";
         }
 
-        return new Date(date)
-            .toLocaleDateString(
+
+
+        /* ========================================
+           SET TEXT
+        ======================================== */
+
+        function setText(
+            id,
+            value
+        ) {
+
+            const element =
+                document.getElementById(id);
+
+
+            if (element) {
+
+                element.textContent =
+                    value;
+
+            }
+
+        }
+
+
+
+        /* ========================================
+           FORMAT DATE
+        ======================================== */
+
+        function formatDate(date) {
+
+            if (!date) {
+
+                return "Not provided";
+
+            }
+
+
+            const parsed =
+                new Date(date);
+
+
+            if (
+                Number.isNaN(
+                    parsed.getTime()
+                )
+            ) {
+
+                return "Not provided";
+
+            }
+
+
+            return parsed.toLocaleDateString(
                 "en-IN",
                 {
                     day: "2-digit",
@@ -788,22 +3105,65 @@
                 }
             );
 
-    }
+        }
 
 
 
-    /*
-       BACK TO DASHBOARD
-    */
+        /* ========================================
+           ERROR
+        ======================================== */
 
-    function goBack() {
+        function showError(message) {
 
-        window.location.href =
-            "dashboard.html";
+            const reportGrid =
+                document.getElementById(
+                    "reportGrid"
+                );
 
-    }
 
-</script>
+            reportGrid.innerHTML = `
+
+                <div class="error-card full">
+
+                    <div style="
+                        font-size:32px;
+                        margin-bottom:10px;
+                    ">
+                        ⚠️
+                    </div>
+
+                    <strong>
+                        Unable to load report
+                    </strong>
+
+                    <p style="
+                        margin-top:7px;
+                    ">
+                        ${escapeHTML(
+                            message
+                        )}
+                    </p>
+
+                </div>
+
+            `;
+
+        }
+
+
+
+        /* ========================================
+           BACK TO DASHBOARD
+        ======================================== */
+
+        function goBack() {
+
+            window.location.href =
+                "dashboard.html";
+
+        }
+
+    </script>
 
 
 </body>

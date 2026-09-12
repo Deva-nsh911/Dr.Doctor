@@ -81,13 +81,128 @@ app.use(
 
 async function initializeDatabase() {
 
-    await db.execute(`
+     await db.execute(`
         CREATE TABLE IF NOT EXISTS doctors (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             email TEXT UNIQUE NOT NULL,
             password TEXT NOT NULL,
+            gender TEXT,
+            dob TEXT,
+            phone TEXT,
+            mbbs_college TEXT,
+            mbbs_year TEXT,
+            md_college TEXT,
+            specialization TEXT,
+            super_speciality_college TEXT,
+            super_speciality TEXT,
+            registration_no TEXT,
+            registration_council TEXT,
+            hospital TEXT,
+            department TEXT,
+            designation TEXT,
+            city TEXT,
+            experience TEXT,
+            consultation_type TEXT,
+            expertise TEXT,
+            languages TEXT,
+            certifications TEXT,
+            awards TEXT,
+            bio TEXT,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    `);
+
+    // =====================================================
+    // ADD PROFILE COLUMNS TO EXISTING DATABASE
+    // =====================================================
+
+    const profileColumns = [
+        ["gender", "TEXT"],
+        ["dob", "TEXT"],
+        ["phone", "TEXT"],
+        ["mbbs_college", "TEXT"],
+        ["mbbs_year", "TEXT"],
+        ["md_college", "TEXT"],
+        ["specialization", "TEXT"],
+        ["super_speciality_college", "TEXT"],
+        ["super_speciality", "TEXT"],
+        ["registration_no", "TEXT"],
+        ["registration_council", "TEXT"],
+        ["hospital", "TEXT"],
+        ["department", "TEXT"],
+        ["designation", "TEXT"],
+        ["city", "TEXT"],
+        ["experience", "TEXT"],
+        ["consultation_type", "TEXT"],
+        ["expertise", "TEXT"],
+        ["languages", "TEXT"],
+        ["certifications", "TEXT"],
+        ["awards", "TEXT"],
+        ["bio", "TEXT"]
+    ];
+
+    for (const [column, type] of profileColumns) {
+
+        try {
+
+            await db.execute(`
+                ALTER TABLE doctors
+                ADD COLUMN ${column} ${type}
+            `);
+
+        } catch (error) {
+
+            // Column already exists.
+            // Ignore this error so the server can continue.
+            if (!error.message.toLowerCase().includes("duplicate")) {
+                console.log(
+                    `Column ${column} may already exist.`
+                );
+            }
+        }
+    }
+
+
+    // =====================================================
+    // ACCESS CODES
+    // =====================================================
+
+    await db.execute(`
+        CREATE TABLE IF NOT EXISTS access_codes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            doctor_id INTEGER NOT NULL,
+            code TEXT UNIQUE NOT NULL,
+            active INTEGER DEFAULT 1,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+            FOREIGN KEY (doctor_id)
+            REFERENCES doctors(id)
+        )
+    `);
+
+
+    // =====================================================
+    // CONSULTATIONS
+    // =====================================================
+
+    await db.execute(`
+        CREATE TABLE IF NOT EXISTS consultations (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            doctor_id INTEGER NOT NULL,
+            patient_id TEXT NOT NULL,
+            patient_name TEXT NOT NULL,
+            patient_age INTEGER,
+            patient_gender TEXT,
+            patient_phone TEXT,
+            patient_blood_group TEXT,
+            language TEXT,
+            conversation TEXT,
+            report TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+            FOREIGN KEY (doctor_id)
+            REFERENCES doctors(id)
         )
     `);
 
@@ -305,27 +420,285 @@ app.post("/api/doctor/login", async (req, res) => {
     }
 });
 
-
 // =====================================================
-// CHECK LOGGED-IN DOCTOR
+// GET LOGGED-IN DOCTOR PROFILE
 // =====================================================
 
-app.get("/api/doctor/me", (req, res) => {
+app.get("/api/doctor/me", async (req, res) => {
 
     if (!req.session || !req.session.doctorId) {
+
         return res.status(401).json({
             success: false,
             message: "Not logged in."
         });
     }
 
-    res.json({
-        success: true,
-        doctor: {
-            id: req.session.doctorId,
-            name: req.session.doctorName
+    try {
+
+        const doctorId =
+            Number(req.session.doctorId);
+
+        const result = await db.execute({
+            sql: `
+                SELECT
+                    id,
+                    name,
+                    email,
+                    gender,
+                    dob,
+                    phone,
+                    mbbs_college,
+                    mbbs_year,
+                    md_college,
+                    specialization,
+                    super_speciality_college,
+                    super_speciality,
+                    registration_no,
+                    registration_council,
+                    hospital,
+                    department,
+                    designation,
+                    city,
+                    experience,
+                    consultation_type,
+                    expertise,
+                    languages,
+                    certifications,
+                    awards,
+                    bio,
+                    created_at
+                FROM doctors
+                WHERE id = ?
+            `,
+            args: [doctorId]
+        });
+
+        const doctor = result.rows[0];
+
+        if (!doctor) {
+
+            return res.status(404).json({
+                success: false,
+                message: "Doctor profile not found."
+            });
         }
-    });
+
+        res.json({
+            success: true,
+            doctor
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Doctor profile error:",
+            error
+        );
+
+        res.status(500).json({
+            success: false,
+            message: "Could not load doctor profile."
+        });
+    }
+});
+
+// =====================================================
+// UPDATE DOCTOR PROFILE
+// =====================================================
+
+app.put("/api/doctor/profile", async (req, res) => {
+
+    // -------------------------------------------------
+    // CHECK LOGIN
+    // -------------------------------------------------
+
+    if (!req.session || !req.session.doctorId) {
+
+        return res.status(401).json({
+            success: false,
+            message: "Please login first."
+        });
+    }
+
+
+    try {
+
+        const doctorId =
+            Number(req.session.doctorId);
+
+
+        // -------------------------------------------------
+        // GET PROFILE DATA
+        // -------------------------------------------------
+
+        const {
+            name,
+            gender,
+            dob,
+            phone,
+            email,
+            mbbs_college,
+            mbbs_year,
+            md_college,
+            specialization,
+            super_speciality_college,
+            super_speciality,
+            registration_no,
+            registration_council,
+            hospital,
+            department,
+            designation,
+            city,
+            experience,
+            consultation_type,
+            expertise,
+            languages,
+            certifications,
+            awards,
+            bio
+        } = req.body;
+
+
+        // -------------------------------------------------
+        // BASIC VALIDATION
+        // -------------------------------------------------
+
+        if (!name || !email) {
+
+            return res.status(400).json({
+                success: false,
+                message: "Name and email are required."
+            });
+        }
+
+
+        // -------------------------------------------------
+        // CHECK EMAIL
+        // -------------------------------------------------
+
+        const existingEmail = await db.execute({
+            sql: `
+                SELECT id
+                FROM doctors
+                WHERE email = ?
+                AND id != ?
+            `,
+            args: [
+                email,
+                doctorId
+            ]
+        });
+
+
+        if (existingEmail.rows.length > 0) {
+
+            return res.status(400).json({
+                success: false,
+                message: "This email is already being used by another doctor."
+            });
+        }
+
+
+        // -------------------------------------------------
+        // UPDATE DATABASE
+        // -------------------------------------------------
+
+        await db.execute({
+
+            sql: `
+                UPDATE doctors
+                SET
+                    name = ?,
+                    email = ?,
+                    gender = ?,
+                    dob = ?,
+                    phone = ?,
+                    mbbs_college = ?,
+                    mbbs_year = ?,
+                    md_college = ?,
+                    specialization = ?,
+                    super_speciality_college = ?,
+                    super_speciality = ?,
+                    registration_no = ?,
+                    registration_council = ?,
+                    hospital = ?,
+                    department = ?,
+                    designation = ?,
+                    city = ?,
+                    experience = ?,
+                    consultation_type = ?,
+                    expertise = ?,
+                    languages = ?,
+                    certifications = ?,
+                    awards = ?,
+                    bio = ?
+                WHERE id = ?
+            `,
+
+            args: [
+                name,
+                email,
+                gender || null,
+                dob || null,
+                phone || null,
+                mbbs_college || null,
+                mbbs_year || null,
+                md_college || null,
+                specialization || null,
+                super_speciality_college || null,
+                super_speciality || null,
+                registration_no || null,
+                registration_council || null,
+                hospital || null,
+                department || null,
+                designation || null,
+                city || null,
+                experience || null,
+                consultation_type || null,
+                expertise || null,
+                languages || null,
+                certifications || null,
+                awards || null,
+                bio || null,
+                doctorId
+            ]
+        });
+
+
+        // -------------------------------------------------
+        // UPDATE SESSION NAME
+        // -------------------------------------------------
+
+        req.session = {
+            ...req.session,
+            doctorId: doctorId,
+            doctorName: name
+        };
+
+
+        // -------------------------------------------------
+        // RESPONSE
+        // -------------------------------------------------
+
+        res.json({
+            success: true,
+            message: "Profile updated successfully."
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Doctor profile update error:",
+            error
+        );
+
+        res.status(500).json({
+            success: false,
+            message: "Could not update doctor profile."
+        });
+    }
 });
 
 
@@ -760,7 +1133,7 @@ Do not explain your reasoning.
             const completion =
                 await groq.chat.completions.create({
 
-                    model: "openai/gpt-oss-20b",
+                    model: "llama-3.3-70b-versatile",
 
                     messages: [
 
@@ -1123,7 +1496,7 @@ Return ONLY the report.
             const completion =
                 await groq.chat.completions.create({
 
-                    model: "openai/gpt-oss-20b",
+                    model: "llama-3.3-70b-versatile",
 
                     messages: [
 

@@ -1,0 +1,2173 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Doctor Profile | Dr.Doctor</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        /* =========================================
+           DOCTOR PROFILE
+        ========================================= */
+
+        .profile-section {
+            margin-bottom: 28px;
+        }
+
+
+        /* =========================================
+           PAGE HEADER
+        ========================================= */
+
+        .profile-page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+
+            margin-bottom: 22px;
+        }
+
+        .profile-title p {
+            margin: 0 0 6px;
+
+            color: #1261a0;
+
+            font-size: 11px;
+            font-weight: 800;
+
+            letter-spacing: 1.2px;
+        }
+
+        .profile-title h1 {
+            margin: 0 0 6px;
+
+            color: #17384d;
+
+            font-size: 25px;
+        }
+
+        .profile-title span {
+            color: #7a8c97;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================================
+           PROFILE HERO
+        ========================================= */
+
+        .profile-hero {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 25px;
+
+            padding: 25px;
+
+            background: white;
+
+            border: 1px solid #e0ebf1;
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 8px 25px rgba(25, 75, 100, 0.04);
+        }
+
+
+        .profile-identity {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+        }
+
+
+        .profile-avatar {
+
+            width: 78px;
+            height: 78px;
+
+            min-width: 78px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: #e8f3fb;
+
+            border: 5px solid #f3f9fc;
+
+            font-size: 36px;
+        }
+
+
+        .profile-identity h2 {
+
+            margin: 0 0 5px;
+
+            color: #17384d;
+
+            font-size: 21px;
+        }
+
+
+        .profile-identity p {
+
+            margin: 0 0 9px;
+
+            color: #6d8491;
+
+            font-size: 12px;
+        }
+
+
+        .verified {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+            padding: 5px 10px;
+
+            border-radius: 20px;
+
+            background: #e8f8f3;
+
+            color: #078878;
+
+            font-size: 10px;
+
+            font-weight: 800;
+        }
+
+
+        /* =========================================
+           EDIT BUTTON
+        ========================================= */
+
+        .edit-btn {
+
+            border: none;
+
+            padding: 11px 18px;
+
+            border-radius: 9px;
+
+            background: #1261a0;
+
+            color: white;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .edit-btn:hover {
+
+            background: #0e4f85;
+
+            transform: translateY(-1px);
+
+            box-shadow:
+                0 6px 15px rgba(18, 97, 160, 0.18);
+        }
+
+
+        .save-btn {
+
+            background: #078878;
+        }
+
+
+        .save-btn:hover {
+
+            background: #056f63;
+        }
+
+
+        .cancel-btn {
+
+            margin-left: 8px;
+
+            border: 1px solid #d9e6ec;
+
+            padding: 10px 16px;
+
+            border-radius: 9px;
+
+            background: white;
+
+            color: #607987;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================================
+           GRID
+        ========================================= */
+
+        .profile-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 22px;
+        }
+
+
+        /* =========================================
+           CARD
+        ========================================= */
+
+        .profile-card {
+
+            background: white;
+
+            border: 1px solid #e0ebf1;
+
+            border-radius: 16px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 8px 25px rgba(25, 75, 100, 0.04);
+        }
+
+
+        .profile-card-header {
+
+            padding: 17px 20px;
+
+            background: #fbfdfe;
+
+            border-bottom: 1px solid #edf2f5;
+        }
+
+
+        .profile-card-header p {
+
+            margin: 0 0 4px;
+
+            color: #1261a0;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+        }
+
+
+        .profile-card-header h2 {
+
+            margin: 0;
+
+            color: #17384d;
+
+            font-size: 17px;
+        }
+
+
+        .profile-card-body {
+
+            padding: 20px;
+        }
+
+
+        /* =========================================
+           INFORMATION
+        ========================================= */
+
+        .info-row {
+
+            display: grid;
+
+            grid-template-columns:
+                155px 1fr;
+
+            gap: 15px;
+
+            padding: 13px 0;
+
+            border-bottom: 1px solid #edf2f5;
+        }
+
+
+        .info-row:first-child {
+
+            padding-top: 0;
+        }
+
+
+        .info-row:last-child {
+
+            border-bottom: none;
+
+            padding-bottom: 0;
+        }
+
+
+        .info-label {
+
+            color: #8296a1;
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+
+        .info-value {
+
+            color: #34566a;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            word-break: break-word;
+        }
+
+
+        /* =========================================
+           EDIT INPUTS
+        ========================================= */
+
+        .edit-input {
+
+            width: 100%;
+
+            box-sizing: border-box;
+
+            padding: 8px 10px;
+
+            border: 1px solid #dce8ee;
+
+            border-radius: 7px;
+
+            outline: none;
+
+            background: white;
+
+            color: #34566a;
+
+            font-family: inherit;
+
+            font-size: 12px;
+
+            transition: 0.2s;
+        }
+
+
+        .edit-input:focus {
+
+            border-color: #1261a0;
+
+            box-shadow:
+                0 0 0 3px rgba(18, 97, 160, 0.08);
+        }
+
+
+        textarea.edit-input {
+
+            min-height: 95px;
+
+            resize: vertical;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================================
+           FULL WIDTH
+        ========================================= */
+
+        .full-width {
+
+            grid-column: 1 / -1;
+        }
+
+
+        /* =========================================
+           PRACTICE
+        ========================================= */
+
+        .practice-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+        }
+
+
+        .practice-item label {
+
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #8296a1;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        .practice-value {
+
+            color: #34566a;
+
+            font-size: 12px;
+
+            font-weight: 600;
+        }
+
+
+        /* =========================================
+           EXPERTISE
+        ========================================= */
+
+        .expertise-list {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 8px;
+        }
+
+
+        .expertise-tag {
+
+            padding: 7px 11px;
+
+            border-radius: 20px;
+
+            background: #edf6fc;
+
+            color: #1261a0;
+
+            font-size: 10px;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================================
+           ABOUT
+        ========================================= */
+
+        .about-row {
+
+            margin-bottom: 20px;
+        }
+
+
+        .about-row:last-child {
+
+            margin-bottom: 0;
+        }
+
+
+        .about-label {
+
+            margin-bottom: 7px;
+
+            color: #8296a1;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        .about-value {
+
+            color: #607987;
+
+            font-size: 12px;
+
+            line-height: 1.7;
+        }
+
+
+        /* =========================================
+           SAVE MESSAGE
+        ========================================= */
+
+        .save-message {
+
+            display: none;
+
+            margin-top: 15px;
+
+            padding: 11px 15px;
+
+            border-radius: 8px;
+
+            background: #e8f8f3;
+
+            color: #078878;
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+
+        .save-message.error {
+
+            background: #fff1f1;
+
+            color: #c44545;
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 900px) {
+
+            .profile-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+
+                grid-column: auto;
+            }
+
+            .profile-hero {
+
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+            .edit-actions {
+
+                width: 100%;
+            }
+
+            .edit-btn {
+
+                width: 100%;
+            }
+
+            .cancel-btn {
+
+                width: 100%;
+
+                margin: 8px 0 0;
+            }
+
+            .practice-grid {
+
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+        @media (max-width: 600px) {
+
+            .profile-hero {
+
+                padding: 18px;
+
+                border-radius: 14px;
+            }
+
+            .profile-avatar {
+
+                width: 62px;
+                height: 62px;
+
+                min-width: 62px;
+
+                font-size: 28px;
+            }
+
+            .profile-identity h2 {
+
+                font-size: 18px;
+            }
+
+            .profile-card {
+
+                border-radius: 14px;
+            }
+
+            .profile-card-body {
+
+                padding: 17px;
+            }
+
+            .info-row {
+
+                grid-template-columns: 1fr;
+
+                gap: 6px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body class="dashboard-page">
+
+
+<div class="dashboard-layout">
+
+
+    <!-- =========================================
+         SIDEBAR
+    ========================================== -->
+
+    <aside class="sidebar">
+
+
+        <div class="sidebar-logo">
+
+            <div class="logo-icon">
+                ✚
+            </div>
+
+            <span>
+                Dr.Doctor
+            </span>
+
+        </div>
+
+
+        <div class="doctor-mini">
+
+            <div class="doctor-avatar">
+                👨‍⚕️
+            </div>
+
+            <div>
+
+                <strong id="sidebarDoctorName">
+                    Loading...
+                </strong>
+
+                <small>
+                    Medical Professional
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+
+            <a href="dashboard.html">
+
+                <span>▦</span>
+
+                Dashboard
+
+            </a>
+
+
+            <a
+                href="doctor-profile.html"
+                class="active">
+
+                <span>👤</span>
+
+                My Profile
+
+            </a>
+
+
+            <a href="dashboard.html#accessSection">
+
+                <span>🔐</span>
+
+                Patient Access
+
+            </a>
+
+
+            <a href="dashboard.html#consultationsSection">
+
+                <span>📋</span>
+
+                Consultations
+
+            </a>
+
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <button onclick="logout()">
+
+                <span>↪</span>
+
+                Logout
+
+            </button>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =========================================
+         MAIN
+    ========================================== -->
+
+    <main class="dashboard-main">
+
+
+        <!-- HEADER -->
+
+        <header class="profile-page-header">
+
+            <div class="profile-title">
+
+                <p>
+                    DOCTOR PORTAL
+                </p>
+
+                <h1>
+                    Doctor Profile
+                </h1>
+
+                <span>
+                    Manage your personal and professional information.
+                </span>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =========================================
+             PROFILE HERO
+        ========================================== -->
+
+        <section class="profile-section">
+
+
+            <div class="profile-hero">
+
+
+                <div class="profile-identity">
+
+
+                    <div class="profile-avatar">
+                        👨‍⚕️
+                    </div>
+
+
+                    <div>
+
+                        <h2 id="heroName">
+                            Dr. Doctor
+                        </h2>
+
+                        <p id="heroSpecialization">
+                            Medical Professional
+                        </p>
+
+                        <span class="verified">
+                            ✓ VERIFIED
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="edit-actions">
+
+                    <button
+                        id="editButton"
+                        class="edit-btn"
+                        onclick="enableEdit()">
+
+                        ✎ Edit Profile
+
+                    </button>
+
+
+                    <button
+                        id="cancelButton"
+                        class="cancel-btn"
+                        onclick="cancelEdit()"
+                        style="display:none;">
+
+                        Cancel
+
+                    </button>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================================
+             PROFILE INFORMATION
+        ========================================== -->
+
+        <section class="profile-section">
+
+
+            <div class="profile-grid">
+
+
+                <!-- =================================
+                     BASIC INFORMATION
+                ================================== -->
+
+                <div class="profile-card">
+
+
+                    <div class="profile-card-header">
+
+                        <p>
+                            PERSONAL DETAILS
+                        </p>
+
+                        <h2>
+                            Basic Information
+                        </h2>
+
+                    </div>
+
+
+                    <div class="profile-card-body">
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Full Name
+                            </span>
+
+                            <span
+                                class="info-value"
+                                id="nameValue">
+                                —
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Gender
+                            </span>
+
+                            <span
+                                class="info-value"
+                                id="genderValue">
+                                —
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Date of Birth
+                            </span>
+
+                            <span
+                                class="info-value"
+                                id="dobValue">
+                                —
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Phone Number
+                            </span>
+
+                            <span
+                                class="info-value"
+                                id="phoneValue">
+                                —
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Email ID
+                            </span>
+
+                            <span
+                                class="info-value"
+                                id="emailValue">
+                                —
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================
+                     PROFESSIONAL INFORMATION
+                ================================== -->
+
+                <div class="profile-card">
+
+
+                    <div class="profile-card-header">
+
+                        <p>
+                            MEDICAL QUALIFICATIONS
+                        </p>
+
+                        <h2>
+                            Professional Information
+                        </h2>
+
+                    </div>
+
+
+                    <div class="profile-card-body">
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                MBBS College
+                            </span>
+
+                            <span
+                                class="info-value"
+                                id="mbbsCollegeValue">
+                                —
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                MBBS Graduation Year
+                            </span>
+
+                            <span
+                                class="info-value"
+                                id="mbbsYearValue">
+                                —
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                MD / MS College
+                            </span>
+
+                            <span
+                                class="info-value"
+                                id="mdCollegeValue">
+                                —
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                MD / MS Specialization
+                            </span>
+
+                            <span
+                                class="info-value"
+                                id="specializationValue">
+                                —
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Super-Speciality College
+                            </span>
+
+                            <span
+                                class="info-value"
+                                id="superSpecialityCollegeValue">
+                                —
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Super-Speciality
+                            </span>
+
+                            <span
+                                class="info-value"
+                                id="superSpecialityValue">
+                                —
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Registration No.
+                            </span>
+
+                            <span
+                                class="info-value"
+                                id="registrationNoValue">
+                                —
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Registration Council
+                            </span>
+
+                            <span
+                                class="info-value"
+                                id="registrationCouncilValue">
+                                —
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================
+                     CURRENT PRACTICE
+                ================================== -->
+
+                <div class="profile-card full-width">
+
+
+                    <div class="profile-card-header">
+
+                        <p>
+                            CURRENT PRACTICE
+                        </p>
+
+                        <h2>
+                            Current Practice
+                        </h2>
+
+                    </div>
+
+
+                    <div class="profile-card-body">
+
+
+                        <div class="practice-grid">
+
+
+                            <div class="practice-item">
+
+                                <label>
+                                    Hospital / Clinic
+                                </label>
+
+                                <div
+                                    class="practice-value"
+                                    id="hospitalValue">
+                                    —
+                                </div>
+
+                            </div>
+
+
+                            <div class="practice-item">
+
+                                <label>
+                                    Department
+                                </label>
+
+                                <div
+                                    class="practice-value"
+                                    id="departmentValue">
+                                    —
+                                </div>
+
+                            </div>
+
+
+                            <div class="practice-item">
+
+                                <label>
+                                    Designation
+                                </label>
+
+                                <div
+                                    class="practice-value"
+                                    id="designationValue">
+                                    —
+                                </div>
+
+                            </div>
+
+
+                            <div class="practice-item">
+
+                                <label>
+                                    City
+                                </label>
+
+                                <div
+                                    class="practice-value"
+                                    id="cityValue">
+                                    —
+                                </div>
+
+                            </div>
+
+
+                            <div class="practice-item">
+
+                                <label>
+                                    Experience
+                                </label>
+
+                                <div
+                                    class="practice-value"
+                                    id="experienceValue">
+                                    —
+                                </div>
+
+                            </div>
+
+
+                            <div class="practice-item">
+
+                                <label>
+                                    Consultation Type
+                                </label>
+
+                                <div
+                                    class="practice-value"
+                                    id="consultationTypeValue">
+                                    —
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================
+                     ABOUT DOCTOR
+                ================================== -->
+
+                <div class="profile-card full-width">
+
+
+                    <div class="profile-card-header">
+
+                        <p>
+                            PROFESSIONAL PROFILE
+                        </p>
+
+                        <h2>
+                            About Doctor
+                        </h2>
+
+                    </div>
+
+
+                    <div class="profile-card-body">
+
+
+                        <div class="about-row">
+
+                            <div class="about-label">
+                                Areas of Expertise
+                            </div>
+
+                            <div
+                                class="about-value"
+                                id="expertiseValue">
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <div class="about-row">
+
+                            <div class="about-label">
+                                Languages Spoken
+                            </div>
+
+                            <div
+                                class="about-value"
+                                id="languagesValue">
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <div class="about-row">
+
+                            <div class="about-label">
+                                Certifications
+                            </div>
+
+                            <div
+                                class="about-value"
+                                id="certificationsValue">
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <div class="about-row">
+
+                            <div class="about-label">
+                                Awards & Achievements
+                            </div>
+
+                            <div
+                                class="about-value"
+                                id="awardsValue">
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <div class="about-row">
+
+                            <div class="about-label">
+                                Professional Bio
+                            </div>
+
+                            <div
+                                class="about-value"
+                                id="bioValue">
+                                —
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <div
+                id="saveMessage"
+                class="save-message">
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+</div>
+
+
+
+<script>
+
+    /* =========================================
+       GLOBAL DATA
+    ========================================= */
+
+    let doctorData = {};
+
+    let originalDoctorData = {};
+
+    let editing = false;
+
+
+
+    /* =========================================
+       LOAD DOCTOR
+    ========================================= */
+
+    async function loadDoctorProfile() {
+
+        try {
+
+            const response =
+                await fetch("/api/doctor/me");
+
+
+            const data =
+                await response.json();
+
+
+            if (!data.success) {
+
+                window.location.href =
+                    "login.html";
+
+                return;
+
+            }
+
+
+            doctorData =
+                data.doctor || {};
+
+
+            originalDoctorData =
+                JSON.parse(
+                    JSON.stringify(doctorData)
+                );
+
+
+            displayProfile();
+
+
+        }
+        catch (error) {
+
+            console.error(
+                "Profile loading error:",
+                error
+            );
+
+            showMessage(
+                "Unable to load doctor profile.",
+                true
+            );
+
+        }
+
+    }
+
+
+
+    /* =========================================
+       GET VALUE
+    ========================================= */
+
+    function getValue(key) {
+
+        const value =
+            doctorData[key];
+
+        if (
+            value === null ||
+            value === undefined ||
+            value === ""
+        ) {
+
+            return "Not provided";
+
+        }
+
+        return value;
+
+    }
+
+
+
+    /* =========================================
+       DISPLAY PROFILE
+    ========================================= */
+
+    function displayProfile() {
+
+        const name =
+            doctorData.name ||
+            "Doctor";
+
+
+        const fullName =
+            "Dr. " + name;
+
+
+        document.getElementById(
+            "sidebarDoctorName"
+        ).textContent =
+            fullName;
+
+
+        document.getElementById(
+            "heroName"
+        ).textContent =
+            fullName;
+
+
+        document.getElementById(
+            "heroSpecialization"
+        ).textContent =
+            getValue(
+                "specialization"
+            );
+
+
+        setText(
+            "nameValue",
+            fullName
+        );
+
+
+        setText(
+            "genderValue",
+            getValue("gender")
+        );
+
+
+        setText(
+            "dobValue",
+            getValue("dob")
+        );
+
+
+        setText(
+            "phoneValue",
+            getValue("phone")
+        );
+
+
+        setText(
+            "emailValue",
+            getValue("email")
+        );
+
+
+        setText(
+            "mbbsCollegeValue",
+            getValue("mbbs_college")
+        );
+
+
+        setText(
+            "mbbsYearValue",
+            getValue("mbbs_year")
+        );
+
+
+        setText(
+            "mdCollegeValue",
+            getValue("md_college")
+        );
+
+
+        setText(
+            "specializationValue",
+            getValue("specialization")
+        );
+
+
+        setText(
+            "superSpecialityCollegeValue",
+            getValue(
+                "super_speciality_college"
+            )
+        );
+
+
+        setText(
+            "superSpecialityValue",
+            getValue(
+                "super_speciality"
+            )
+        );
+
+
+        setText(
+            "registrationNoValue",
+            getValue(
+                "registration_no"
+            )
+        );
+
+
+        setText(
+            "registrationCouncilValue",
+            getValue(
+                "registration_council"
+            )
+        );
+
+
+        setText(
+            "hospitalValue",
+            getValue("hospital")
+        );
+
+
+        setText(
+            "departmentValue",
+            getValue("department")
+        );
+
+
+        setText(
+            "designationValue",
+            getValue("designation")
+        );
+
+
+        setText(
+            "cityValue",
+            getValue("city")
+        );
+
+
+        setText(
+            "experienceValue",
+            getValue("experience")
+        );
+
+
+        setText(
+            "consultationTypeValue",
+            getValue(
+                "consultation_type"
+            )
+        );
+
+
+        setText(
+            "expertiseValue",
+            getValue("expertise")
+        );
+
+
+        setText(
+            "languagesValue",
+            getValue("languages")
+        );
+
+
+        setText(
+            "certificationsValue",
+            getValue(
+                "certifications"
+            )
+        );
+
+
+        setText(
+            "awardsValue",
+            getValue("awards")
+        );
+
+
+        setText(
+            "bioValue",
+            getValue("bio")
+        );
+
+    }
+
+
+
+    /* =========================================
+       SAFE TEXT
+    ========================================= */
+
+    function setText(id, value) {
+
+        const element =
+            document.getElementById(id);
+
+        if (element) {
+
+            element.textContent =
+                value;
+
+        }
+
+    }
+
+
+
+    /* =========================================
+       ENABLE EDIT
+    ========================================= */
+
+    function enableEdit() {
+
+        if (editing) return;
+
+        editing = true;
+
+
+        const fields = [
+
+            ["nameValue", "name", "text"],
+            ["genderValue", "gender", "text"],
+            ["dobValue", "dob", "date"],
+            ["phoneValue", "phone", "tel"],
+            ["emailValue", "email", "email"],
+
+            ["mbbsCollegeValue",
+             "mbbs_college",
+             "text"],
+
+            ["mbbsYearValue",
+             "mbbs_year",
+             "number"],
+
+            ["mdCollegeValue",
+             "md_college",
+             "text"],
+
+            ["specializationValue",
+             "specialization",
+             "text"],
+
+            ["superSpecialityCollegeValue",
+             "super_speciality_college",
+             "text"],
+
+            ["superSpecialityValue",
+             "super_speciality",
+             "text"],
+
+            ["registrationNoValue",
+             "registration_no",
+             "text"],
+
+            ["registrationCouncilValue",
+             "registration_council",
+             "text"],
+
+            ["hospitalValue",
+             "hospital",
+             "text"],
+
+            ["departmentValue",
+             "department",
+             "text"],
+
+            ["designationValue",
+             "designation",
+             "text"],
+
+            ["cityValue",
+             "city",
+             "text"],
+
+            ["experienceValue",
+             "experience",
+             "text"],
+
+            ["consultationTypeValue",
+             "consultation_type",
+             "text"],
+
+            ["expertiseValue",
+             "expertise",
+             "text"],
+
+            ["languagesValue",
+             "languages",
+             "text"],
+
+            ["certificationsValue",
+             "certifications",
+             "text"],
+
+            ["awardsValue",
+             "awards",
+             "text"],
+
+            ["bioValue",
+             "bio",
+             "textarea"]
+
+        ];
+
+
+        fields.forEach(
+            ([elementId, key, type]) => {
+
+                const element =
+                    document.getElementById(
+                        elementId
+                    );
+
+
+                if (!element) return;
+
+
+                let value =
+                    doctorData[key] || "";
+
+
+                let input;
+
+
+                if (type === "textarea") {
+
+                    input =
+                        document.createElement(
+                            "textarea"
+                        );
+
+                }
+                else {
+
+                    input =
+                        document.createElement(
+                            "input"
+                        );
+
+                    input.type =
+                        type;
+
+                }
+
+
+                input.className =
+                    "edit-input";
+
+
+                input.value =
+                    value;
+
+
+                input.dataset.key =
+                    key;
+
+
+                element.replaceWith(
+                    input
+                );
+
+            }
+        );
+
+
+        document.getElementById(
+            "editButton"
+        ).textContent =
+            "✓ Save Changes";
+
+
+        document.getElementById(
+            "editButton"
+        ).classList.add(
+            "save-btn"
+        );
+
+
+        document.getElementById(
+            "editButton"
+        ).onclick =
+            saveProfile;
+
+
+        document.getElementById(
+            "cancelButton"
+        ).style.display =
+            "inline-block";
+
+    }
+
+
+
+    /* =========================================
+       SAVE PROFILE
+    ========================================= */
+
+    async function saveProfile() {
+
+        const inputs =
+            document.querySelectorAll(
+                ".edit-input"
+            );
+
+
+        const updatedData = {};
+
+
+        inputs.forEach(
+            input => {
+
+                updatedData[
+                    input.dataset.key
+                ] =
+                    input.value.trim();
+
+            }
+        );
+
+
+        const button =
+            document.getElementById(
+                "editButton"
+            );
+
+
+        button.disabled =
+            true;
+
+
+        button.textContent =
+            "Saving...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/doctor/profile",
+                    {
+                        method: "PUT",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify(
+                                updatedData
+                            )
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!data.success) {
+
+                throw new Error(
+                    data.message ||
+                    "Could not save profile."
+                );
+
+            }
+
+
+            doctorData =
+                data.doctor ||
+                {
+                    ...doctorData,
+                    ...updatedData
+                };
+
+
+            originalDoctorData =
+                JSON.parse(
+                    JSON.stringify(
+                        doctorData
+                    )
+                );
+
+
+            editing = false;
+
+
+            displayProfile();
+
+
+            resetEditButton();
+
+
+            showMessage(
+                "Profile updated successfully ✓"
+            );
+
+
+        }
+        catch (error) {
+
+            console.error(
+                "Profile update error:",
+                error
+            );
+
+
+            button.disabled =
+                false;
+
+
+            button.textContent =
+                "✓ Save Changes";
+
+
+            showMessage(
+                error.message ||
+                "Unable to save profile.",
+                true
+            );
+
+        }
+
+    }
+
+
+
+    /* =========================================
+       CANCEL EDIT
+    ========================================= */
+
+    function cancelEdit() {
+
+        doctorData =
+            JSON.parse(
+                JSON.stringify(
+                    originalDoctorData
+                )
+            );
+
+
+        editing = false;
+
+
+        displayProfile();
+
+
+        resetEditButton();
+
+
+        showMessage(
+            "Changes discarded."
+        );
+
+    }
+
+
+
+    /* =========================================
+       RESET BUTTON
+    ========================================= */
+
+    function resetEditButton() {
+
+        const button =
+            document.getElementById(
+                "editButton"
+            );
+
+
+        button.disabled =
+            false;
+
+
+        button.textContent =
+            "✎ Edit Profile";
+
+
+        button.classList.remove(
+            "save-btn"
+        );
+
+
+        button.onclick =
+            enableEdit;
+
+
+        document.getElementById(
+            "cancelButton"
+        ).style.display =
+            "none";
+
+    }
+
+
+
+    /* =========================================
+       MESSAGE
+    ========================================= */
+
+    function showMessage(
+        message,
+        error = false
+    ) {
+
+        const element =
+            document.getElementById(
+                "saveMessage"
+            );
+
+
+        element.textContent =
+            message;
+
+
+        element.classList.toggle(
+            "error",
+            error
+        );
+
+
+        element.style.display =
+            "block";
+
+
+        setTimeout(
+            () => {
+
+                element.style.display =
+                    "none";
+
+            },
+            3500
+        );
+
+    }
+
+
+
+    /* =========================================
+       LOGOUT
+    ========================================= */
+
+    async function logout() {
+
+        try {
+
+            await fetch(
+                "/api/doctor/logout",
+                {
+                    method: "POST"
+                }
+            );
+
+        }
+        catch (error) {
+
+            console.error(
+                "Logout error:",
+                error
+            );
+
+        }
+
+
+        window.location.href =
+            "login.html";
+
+    }
+
+
+
+    /* =========================================
+       START
+    ========================================= */
+
+    loadDoctorProfile();
+
+</script>
+
+
+</body>
+
+</html>
+```
